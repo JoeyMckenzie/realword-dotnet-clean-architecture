@@ -1,16 +1,9 @@
-namespace Conduit.Domain.Entities
+namespace Conduit.Domain.Dtos
 {
     using System.Collections.Generic;
 
-    public class Article : BaseEntity
+    public class ArticleDto
     {
-        public int Id { get; set; }
-
-        public Article()
-        {
-            TagList = new HashSet<string>();
-        }
-
         public string Slug { get; set; }
 
         public string Title { get; set; }
@@ -19,8 +12,12 @@ namespace Conduit.Domain.Entities
 
         public string Body { get; set; }
 
-        public ISet<string> TagList { get; }
+        public ICollection<string> TagList { get; set; }
+
+        public bool Favorited { get; set; }
 
         public bool FavoritesCount { get; set; }
+
+        public AuthorDto Author { get; set; }
     }
 }
