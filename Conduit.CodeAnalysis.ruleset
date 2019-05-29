@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RuleSet Name="Conduit Ruleset" Description="Static code analysis for Conduit" ToolsVersion="15.0">
+    <IncludeAll Action="Error" />
+    <Rules AnalyzerId="StyleCop.Analyzers" RuleNamespace="StyleCop.Analyzers">
+        <Rule Id="SA1600" Action="Info" />
+        <Rule Id="CA1822" Action="Info" />
+        <Rule Id="SA1601" Action="Info" />
+        <Rule Id="SA1602" Action="Info" />
+        <Rule Id="SA0001" Action="Info" />
+        <Rule Id="SA1027" Action="Info" />
+        <Rule Id="CA1056" Action="Info" />
+        <Rule Id="SA1101" Action="None" />
+        <Rule Id="SA1309" Action="None" />
+        <Rule Id="SA1413" Action="Info" />
+        <Rule Id="CA1308" Action="Info" />
+        <Rule Id="SA1124" Action="Info" />
+        <Rule Id="SA1204" Action="Info" />
+        <Rule Id="SX1309" Action="Info" />
+        <Rule Id="CA1032" Action="Info" />
+        <Rule Id="CA1031" Action="None" />
+        <Rule Id="SA1402" Action="Info" />
+        <Rule Id="SA1633" Action="Info" />
+        <Rule Id="SA1652" Action="Info" />
+        <Rule Id="CA1707" Action="Info" />
+        <Rule Id="CA2007" Action="None" />
+        <Rule Id="CA1710" Action="Info" />
+        <Rule Id="CA1200" Action="Info" />
+        <Rule Id="CA2234" Action="Info" />
+        <Rule Id="CA2227" Action="Info" />
+        <Rule Id="CA1305" Action="Info" />
+        <Rule Id="CA1801" Action="Info" />
+        <Rule Id="SA1118" Action="Info" />
+        <Rule Id="CA1052" Action="Info" />
+    </Rules>
+    <Rules AnalyzerId="Microsoft.ApiDesignGuidelines.Analyzers" RuleNamespace="Microsoft.ApiDesignGuidelines.Analyzers">
+    </Rules>
+</RuleSet>
