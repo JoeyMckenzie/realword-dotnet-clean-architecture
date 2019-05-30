@@ -3,12 +3,13 @@ namespace Conduit.Domain.Entities
     using System.Collections.Generic;
     using Microsoft.AspNetCore.Identity;
 
-    public class User : IdentityUser
+    public class ConduitUser : IdentityUser
     {
-        public User()
+        public ConduitUser()
         {
             Followers = new HashSet<UserFollow>();
             Following = new HashSet<UserFollow>();
+            Favorites = new HashSet<Favorite>();
         }
 
         public string Username { get; set; }
@@ -20,5 +21,7 @@ namespace Conduit.Domain.Entities
         public ISet<UserFollow> Followers { get; }
 
         public ISet<UserFollow> Following { get; }
+
+        public ISet<Favorite> Favorites { get; }
     }
 }

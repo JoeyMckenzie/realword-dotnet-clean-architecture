@@ -8,6 +8,6 @@ namespace Conduit.Domain.Entities
 
         public virtual string UserId { get; set; }
 
-        public User User { get; set; }
+        public ConduitUser User { get; set; }
     }
 }

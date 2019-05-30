@@ -4,12 +4,13 @@ namespace Conduit.Domain.Entities
 
     public class Article : BaseEntity
     {
-        public int Id { get; set; }
-
         public Article()
         {
-            TagList = new HashSet<string>();
+            ArticleTags = new HashSet<ArticleTag>();
+            Favorites = new HashSet<Favorite>();
         }
+
+        public int Id { get; set; }
 
         public string Slug { get; set; }
 
@@ -19,7 +20,9 @@ namespace Conduit.Domain.Entities
 
         public string Body { get; set; }
 
-        public ISet<string> TagList { get; }
+        public ISet<ArticleTag> ArticleTags { get; }
+
+        public ISet<Favorite> Favorites { get; }
 
         public bool FavoritesCount { get; set; }
     }

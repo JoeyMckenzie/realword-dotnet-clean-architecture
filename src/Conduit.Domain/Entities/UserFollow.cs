@@ -4,10 +4,10 @@ namespace Conduit.Domain.Entities
     {
         public virtual string UserFollowerId { get; set; }
 
-        public User UserFollower { get; set; }
+        public ConduitUser UserFollower { get; set; }
 
         public virtual string UserFollowingId { get; set; }
 
-        public User UserFollowing { get; set; }
+        public ConduitUser UserFollowing { get; set; }
     }
 }
