@@ -8,9 +8,6 @@ namespace Conduit.Persistence.Configurations
     {
         public void Configure(EntityTypeBuilder<ConduitUser> builder)
         {
-            builder.Property(cu => cu.Username)
-                .IsRequired();
-
             builder.Property(cu => cu.Bio)
                 .HasDefaultValue();
 

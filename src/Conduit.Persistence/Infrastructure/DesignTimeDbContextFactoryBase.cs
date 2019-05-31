@@ -1,7 +1,6 @@
 namespace Conduit.Persistence.Infrastructure
 {
     using System;
-    using System.IO;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore.Design;
     using Microsoft.Extensions.Configuration;
@@ -10,36 +9,19 @@ namespace Conduit.Persistence.Infrastructure
         where TContext : DbContext
     {
         private const string ConnectionStringName = "Conduit";
-        private const string AspNetCoreEnvironment = "ASPNETCORE_ENVIRONMENT";
 
         public TContext CreateDbContext(string[] args)
         {
-            var basePath = Directory.GetCurrentDirectory() + string.Format("{0}..{0}..{0}Conduit.Api", Path.DirectorySeparatorChar);
-            Console.WriteLine(basePath);
-            return Create(basePath, Environment.GetEnvironmentVariable(AspNetCoreEnvironment));
-        }
-
-        protected abstract TContext CreateNewInstance(DbContextOptions<TContext> options);
-
-        private TContext Create(string basePath, string environmentName)
-        {
             var configuration = new ConfigurationBuilder()
-                .SetBasePath(basePath)
-                .AddJsonFile("appsettings.json")
-                .AddJsonFile($"appsettings.Local.json", true)
-                .AddJsonFile($"appsettings.{environmentName}.json", true)
+                .AddUserSecrets<DesignTimeDbContextFactoryBase<TContext>>()
                 .AddEnvironmentVariables()
                 .Build();
-            var connectionString = configuration.GetConnectionString(ConnectionStringName);
 
-            return Create(connectionString);
-        }
+            var connectionString = configuration["Conduit"];
 
-        private TContext Create(string connectionString)
-        {
-            if (string.IsNullOrEmpty(connectionString))
+            if (string.IsNullOrWhiteSpace(connectionString))
             {
-                throw new ArgumentException($"Connection string '{ConnectionStringName}' is null or empty.", nameof(connectionString));
+                throw new ArgumentException($"Connection string '{ConnectionStringName}' is null or empty", connectionString?.GetType().Name);
             }
 
             Console.WriteLine($"Connection string: '{connectionString}");
@@ -48,5 +30,7 @@ namespace Conduit.Persistence.Infrastructure
 
             return CreateNewInstance(optionsBuilder.Options);
         }
+
+        protected abstract TContext CreateNewInstance(DbContextOptions<TContext> options);
     }
 }

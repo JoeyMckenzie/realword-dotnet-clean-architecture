@@ -1,7 +1,9 @@
 namespace Conduit.Domain.Entities
 {
-    public class ArticleTag
+    public class ArticleTag : BaseEntity
     {
+        public int Id { get; set; }
+
         public virtual int ArticleId { get; set; }
 
         public Article Article { get; set; }

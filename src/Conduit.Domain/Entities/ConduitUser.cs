@@ -12,8 +12,6 @@ namespace Conduit.Domain.Entities
             Favorites = new HashSet<Favorite>();
         }
 
-        public string Username { get; set; }
-
         public string Bio { get; set; }
 
         public string Image { get; set; }
