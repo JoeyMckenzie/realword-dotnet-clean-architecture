@@ -5,6 +5,7 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>
     <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
+    <UserSecretsId>215683bf-c79e-4614-86c5-73b241a8365c</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
@@ -15,6 +16,13 @@
 
   <ItemGroup>
     <Folder Include="Controllers" />
+    <Folder Include="Filters" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Conduit.Core\Conduit.Core.csproj" />
+    <ProjectReference Include="..\Conduit.Persistence\Conduit.Persistence.csproj" />
+    <ProjectReference Include="..\Conduit.Shared\Conduit.Shared.csproj" />
   </ItemGroup>
 
 </Project>

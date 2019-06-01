@@ -8,6 +8,10 @@ namespace Conduit.Persistence.Configurations
     {
         public void Configure(EntityTypeBuilder<ConduitUser> builder)
         {
+            builder.HasMany(cu => cu.Articles)
+                .WithOne(a => a.Author)
+                .HasForeignKey(cu => cu.AuthorId);
+
             builder.Property(cu => cu.Bio)
                 .HasDefaultValue();
 

@@ -2,14 +2,12 @@ namespace Conduit.Domain.Entities
 {
     public class UserFollow : BaseEntity
     {
-        public int Id { get; set; }
+        public string UserFollowerId { get; set; }
 
-        public virtual string UserFollowerId { get; set; }
+        public virtual ConduitUser UserFollower { get; set; }
 
-        public ConduitUser UserFollower { get; set; }
+        public string UserFollowingId { get; set; }
 
-        public virtual string UserFollowingId { get; set; }
-
-        public ConduitUser UserFollowing { get; set; }
+        public virtual ConduitUser UserFollowing { get; set; }
     }
 }

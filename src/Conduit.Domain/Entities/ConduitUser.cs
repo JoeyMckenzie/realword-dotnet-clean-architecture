@@ -10,6 +10,7 @@ namespace Conduit.Domain.Entities
             Followers = new HashSet<UserFollow>();
             Following = new HashSet<UserFollow>();
             Favorites = new HashSet<Favorite>();
+            Articles = new HashSet<Article>();
         }
 
         public string Bio { get; set; }
@@ -21,5 +22,7 @@ namespace Conduit.Domain.Entities
         public ISet<UserFollow> Following { get; }
 
         public ISet<Favorite> Favorites { get; }
+
+        public ISet<Article> Articles { get; }
     }
 }

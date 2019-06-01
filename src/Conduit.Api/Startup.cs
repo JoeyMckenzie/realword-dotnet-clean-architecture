@@ -1,10 +1,15 @@
 ﻿namespace Conduit.Api
 {
+    using Domain.Entities;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
+    using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
+    using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
+    using Middleware;
+    using Persistence;
 
     public class Startup
     {
@@ -18,6 +23,16 @@
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            // Add EF Core
+            services.AddDbContext<ConduitDbContext>(options =>
+                options.UseSqlServer(Configuration["Conduit"]));
+
+            // Add Identity
+            services.AddDefaultIdentity<ConduitUser>()
+                .AddRoles<IdentityRole>()
+                .AddEntityFrameworkStores<ConduitDbContext>()
+                .AddDefaultTokenProviders();
+
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
 
@@ -34,6 +49,7 @@
                 app.UseHsts();
             }
 
+            app.UseConduitErrorHandlingMiddleware();
             app.UseHttpsRedirection();
             app.UseMvc();
         }
