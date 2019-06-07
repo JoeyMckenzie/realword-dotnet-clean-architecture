@@ -11,6 +11,8 @@ namespace Conduit.Persistence
         {
         }
 
+        public DbSet<ActivityLog> ActivityLogs { get; set; }
+
         public DbSet<Article> Articles { get; set; }
 
         public DbSet<Comment> Comments { get; set; }

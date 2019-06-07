@@ -19,6 +19,28 @@ namespace Conduit.Persistence.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+            modelBuilder.Entity("Conduit.Domain.Entities.ActivityLog", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("ActivityType");
+
+                    b.Property<DateTime>("CreatedAt");
+
+                    b.Property<string>("TransactionId");
+
+                    b.Property<string>("TransactionType")
+                        .IsRequired();
+
+                    b.Property<DateTime>("UpdatedAt");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ActivityLogs");
+                });
+
             modelBuilder.Entity("Conduit.Domain.Entities.Article", b =>
                 {
                     b.Property<int>("Id")

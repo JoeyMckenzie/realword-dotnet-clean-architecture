@@ -31,7 +31,9 @@ namespace Conduit.Persistence
             var testUser1 = new ConduitUser
             {
                 Email = "joey.mckenzie27@gmail.com",
+                NormalizedEmail = "joey.mckenzie27@gmail.com".ToUpperInvariant(),
                 UserName = "joey.mckenzie",
+                NormalizedUserName = "joey.mckenzie".ToUpperInvariant(),
                 Bio = "Lover of cheap and even cheaper wine.",
                 Image = "https://joeymckenzie.azurewebsites.net/images/me.jpg"
             };
@@ -42,7 +44,9 @@ namespace Conduit.Persistence
             var testUser2 = new ConduitUser
             {
                 Email = "test.user@gmail.com",
+                NormalizedEmail = "test.user@gmail.com".ToUpperInvariant(),
                 UserName = "test.user",
+                NormalizedUserName = "test.user".ToUpperInvariant(),
                 Bio = "I AM NOT A ROBOT.",
                 Image = "https://joeymckenzie.azurewebsites.net/images/me.jpg",
             };

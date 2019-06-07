@@ -6,7 +6,9 @@ namespace Conduit.Api.Middleware
     using System.Net;
     using System.Threading.Tasks;
     using Core.Exceptions;
+    using Domain.Dtos;
     using Domain.ViewModels;
+    using FluentValidation;
     using Microsoft.AspNetCore.Http;
     using Microsoft.Extensions.Logging;
     using Newtonsoft.Json;
@@ -50,10 +52,8 @@ namespace Conduit.Api.Middleware
         /// <returns>Writes the API response to the context to be returned in the web layer</returns>
         private static async Task HandleExceptionAsync(HttpContext context, Exception exception)
         {
-            // Declare status code, response, and errors updated based on message/status code returned from the application
-            string errorMessage;
-            object errors;
-            var validationFailures = new List<ConduitApiError>();
+            ErrorDto errors;
+            ICollection<object> errorList = new List<object>();
 
             /*
              * Handle exceptions based on type, while defaulting to generic internal server error for unexpected exceptions.
@@ -64,45 +64,39 @@ namespace Conduit.Api.Middleware
             switch (exception)
             {
                 case ConduitApiException conduitApiException:
-                    errorMessage = conduitApiException.Message;
+                    errors = new ErrorDto(conduitApiException.Message);
                     context.Response.StatusCode = (int)conduitApiException.StatusCode;
                     if (conduitApiException.ApiErrors.Any())
                     {
-                        validationFailures = conduitApiException.ApiErrors.ToList();
+                        errors.Details = conduitApiException.ApiErrors;
                     }
 
                     break;
 
-/*                case ValidationException validationException:
-                    errorMessage = ConduitErrorMessages.ValidationError;
+                case ValidationException validationException:
+                    errorList.Add(ConduitErrorMessages.ValidationError);
                     context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                    errors = validationException.Message;
                     foreach (var validationFailure in validationException.Errors)
                     {
-                        var brewdudeValidationError = new BrewdudeApiError(validationFailure.ErrorMessage)
-                        {
-                            ErrorCode = validationFailure.ErrorCode,
-                            PropertyName = validationFailure.PropertyName
-                        };
-                        _logger.LogInformation("Validation failure to request @{validationFailure}", validationFailure);
-                        validationFailures.Add(brewdudeValidationError);
+                        var conduitValidationError = new ConduitApiError(validationFailure.ErrorMessage, validationFailure.PropertyName);
+                        errorList.Add(conduitValidationError);
                     }
 
-                    break;*/
+                    errors = new ErrorDto(validationException.Message, errorList);
+                    break;
 
                 default:
-                    errorMessage = ConduitErrorMessages.InternalServerError;
+                    errors = new ErrorDto(ConduitErrorMessages.InternalServerError);
                     context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                    errors = exception.Message;
                     break;
             }
 
             // Instantiate the response
             context.Response.ContentType = "application/json";
-            var response = new ErrorViewModel(errorMessage);
+            var errorResponse = new ErrorViewModel(errors);
 
             // Serialize the response and write out to the context buffer to return
-            var result = JsonConvert.SerializeObject(response, ConduitConstants.ConduitJsonSerializerSettings);
+            var result = JsonConvert.SerializeObject(errorResponse, ConduitConstants.ConduitJsonSerializerSettings);
             await context.Response.WriteAsync(result);
         }
     }

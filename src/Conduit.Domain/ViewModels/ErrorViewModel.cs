@@ -4,11 +4,11 @@ namespace Conduit.Domain.ViewModels
 
     public class ErrorViewModel
     {
-        public ErrorViewModel(object errors)
+        public ErrorViewModel(ErrorDto errors)
         {
             Errors = errors;
         }
 
-        public object Errors { get; }
+        public ErrorDto Errors { get; }
     }
 }

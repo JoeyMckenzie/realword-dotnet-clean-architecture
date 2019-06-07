@@ -1,14 +1,15 @@
 namespace Conduit.Domain.Dtos
 {
-    using System.Collections.Generic;
-
     public class ErrorDto
     {
-        public ErrorDto()
+        public ErrorDto(string description, object details = null)
         {
-            Body = new HashSet<string>();
+            Description = description;
+            Details = details;
         }
 
-        public ICollection<string> Body { get; }
+        public string Description { get; }
+
+        public object Details { get; set; }
     }
 }

@@ -38,9 +38,7 @@
                         var timer = new Stopwatch();
                         timer.Start();
                         context.Database.EnsureDeleted();
-
-                        // context.Database.Migrate();
-                        context.Database.EnsureCreated();
+                        context.Database.Migrate();
                         ConduitDbInitializer.Initialize(context);
                         timer.Stop();
                         Console.WriteLine($"Seeding databases, time to initialize {timer.ElapsedMilliseconds} ms");

@@ -1,5 +1,7 @@
 namespace Conduit.Core.Exceptions
 {
+    using System.Net;
+
     public class ConduitApiError
     {
         public ConduitApiError(string errorMessage)
