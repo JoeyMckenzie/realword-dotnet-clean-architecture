@@ -35,7 +35,8 @@ namespace Conduit.Persistence
                 UserName = "joey.mckenzie",
                 NormalizedUserName = "joey.mckenzie".ToUpperInvariant(),
                 Bio = "Lover of cheap and even cheaper wine.",
-                Image = "https://joeymckenzie.azurewebsites.net/images/me.jpg"
+                Image = "https://joeymckenzie.azurewebsites.net/images/me.jpg",
+                SecurityStamp = "someRandomSecurityStamp"
             };
 
             testUser1.PasswordHash = new PasswordHasher<ConduitUser>()
@@ -49,6 +50,7 @@ namespace Conduit.Persistence
                 NormalizedUserName = "test.user".ToUpperInvariant(),
                 Bio = "I AM NOT A ROBOT.",
                 Image = "https://joeymckenzie.azurewebsites.net/images/me.jpg",
+                SecurityStamp = "someRandomSecurityStamp"
             };
 
             testUser2.PasswordHash = new PasswordHasher<ConduitUser>()

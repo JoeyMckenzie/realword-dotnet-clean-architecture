@@ -1,11 +1,10 @@
 namespace Conduit.Infrastructure.Security
 {
     using System;
+    using System.Collections.Generic;
     using System.IdentityModel.Tokens.Jwt;
-    using System.Net;
     using System.Security.Claims;
     using System.Text;
-    using Core.Exceptions;
     using Core.Infrastructure;
     using Domain.Entities;
     using Microsoft.Extensions.Configuration;
@@ -25,24 +24,37 @@ namespace Conduit.Infrastructure.Security
 
         public string CreateToken(ConduitUser user)
         {
+            var tokenKey = Encoding.ASCII.GetBytes(_configuration["Conduit:JwtSecret"]);
+            var issuer = _configuration["Conduit:Issuer"];
+            var audience = _configuration["Conduit:Audience"];
+
+            /*
             var tokenHandler = new JwtSecurityTokenHandler();
-            var tokenKey = Encoding.ASCII.GetBytes(_configuration["ConduitJwtSecret"]);
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = BuildUserBasedClaims(user),
-                Issuer = _configuration["ConduitTokenIssuer"],
-                Audience = _configuration["ConduitTokenAudience"],
+                Issuer = _configuration["Conduit:TokenIssuer"],
+                Audience = _configuration["Conduit:TokenAudience"],
                 IssuedAt = _dateTime.Now,
-                Expires = _dateTime.Now.AddMinutes(30),
-                NotBefore = _dateTime.Now.AddMinutes(29),
+                Expires = _dateTime.Now.AddMinutes(60),
+                NotBefore = _dateTime.Now.AddMinutes(45),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(tokenKey), SecurityAlgorithms.HmacSha256Signature)
             };
+            */
 
-            string tokenString;
+            // string tokenString;
+            var securityToken = new JwtSecurityToken(
+                issuer: issuer,
+                audience: audience,
+                claims: GetDefaultClaims(user, issuer, audience),
+                notBefore: _dateTime.Now,
+                expires: _dateTime.Now.AddMinutes(60),
+                signingCredentials: new SigningCredentials(new SymmetricSecurityKey(tokenKey), SecurityAlgorithms.HmacSha256Signature));
 
+            /*
             try
             {
-                var token = tokenHandler.CreateToken(tokenDescriptor);
+                var token = tokenHandler.CreateToken(securityToken);
                 tokenString = tokenHandler.WriteToken(token);
             }
             catch (Exception e)
@@ -54,31 +66,9 @@ namespace Conduit.Infrastructure.Security
             {
                 throw new ConduitApiException($"Security was not generated properly for user [{user.Id}] ({user.Email}), please try again", HttpStatusCode.BadRequest);
             }
+            */
 
-            return tokenString;
-        }
-
-        public string CreateAnonymousToken()
-        {
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var tokenKey = Encoding.ASCII.GetBytes(_configuration["ConduitJwtSecret"]);
-            var tokenDescriptor = new SecurityTokenDescriptor
-            {
-                Subject = new ClaimsIdentity(new[]
-                {
-                    new Claim(ClaimTypes.Anonymous, "anonymous"),
-                    new Claim(ClaimTypes.Name, "ANONYMOUS_USER"),
-                }),
-                Issuer = _configuration["ConduitTokenIssuer"],
-                Audience = _configuration["ConduitTokenAudience"],
-                IssuedAt = DateTime.UtcNow,
-                Expires = DateTime.UtcNow.AddMinutes(10),
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(tokenKey), SecurityAlgorithms.HmacSha256Signature)
-            };
-            var token = tokenHandler.CreateToken(tokenDescriptor);
-            var tokenString = tokenHandler.WriteToken(token);
-
-            return tokenString;
+            return new JwtSecurityTokenHandler().WriteToken(securityToken);
         }
 
         private static ClaimsIdentity BuildUserBasedClaims(ConduitUser user)
@@ -92,6 +82,19 @@ namespace Conduit.Infrastructure.Security
             };
 
             return new ClaimsIdentity(claims);
+        }
+
+        private static IEnumerable<Claim> GetDefaultClaims(ConduitUser user, string issuer, string audience)
+        {
+            return new[]
+            {
+                new Claim(JwtRegisteredClaimNames.Sub, user.Id),
+                new Claim(JwtRegisteredClaimNames.Email, user.Email),
+                new Claim(JwtRegisteredClaimNames.Iss, issuer),
+                new Claim(JwtRegisteredClaimNames.Aud, audience),
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new Claim("username", user.UserName)
+            };
         }
     }
 }

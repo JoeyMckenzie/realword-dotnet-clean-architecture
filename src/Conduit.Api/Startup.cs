@@ -26,7 +26,6 @@
     using Persistence;
     using Shared;
     using Shared.Constants;
-    using Swashbuckle.AspNetCore.Swagger;
 
     public class Startup
     {
@@ -111,6 +110,7 @@
                 options.SwaggerEndpoint(
                     "/swagger/v1/swagger.json",
                     $"Conduit API version {ConduitConstants.ApiVersion}"));
+            app.UseAuthentication();
             app.UseHttpsRedirection();
             app.UseMvc();
         }

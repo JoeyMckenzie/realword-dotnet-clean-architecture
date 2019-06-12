@@ -1,10 +1,10 @@
 namespace Conduit.Api
 {
-    using System.Security.Claims;
-    using System.Threading;
     using System.Threading.Tasks;
     using Core.Infrastructure;
     using Domain.Entities;
+    using Microsoft.AspNetCore.Authentication;
+    using Microsoft.AspNetCore.Authentication.JwtBearer;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Identity;
 
@@ -23,6 +23,11 @@ namespace Conduit.Api
         {
             var currentHttpContext = _contextAccessor.HttpContext;
             return await _userManager.GetUserAsync(currentHttpContext?.User);
+        }
+
+        public async Task<string> GetCurrentUserToken()
+        {
+            return await _contextAccessor.HttpContext.GetTokenAsync(JwtBearerDefaults.AuthenticationScheme);
         }
     }
 }

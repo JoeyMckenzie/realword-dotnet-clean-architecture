@@ -1,6 +1,7 @@
 namespace Conduit.Api.Controllers
 {
     using System.Threading.Tasks;
+    using Core.Users.Commands.UpdateUser;
     using Core.Users.Queries.GetCurrentUser;
     using Domain.ViewModels;
     using Microsoft.AspNetCore.Authorization;
@@ -18,10 +19,17 @@ namespace Conduit.Api.Controllers
         }
 
         [HttpGet]
-        public Task<UserViewModel> RetrieveCurrentUser()
+        public async Task<UserViewModel> RetrieveCurrentUser()
         {
             _logger.LogInformation("Retrieving current user");
-            return Mediator.Send(new GetCurrentUserQuery());
+            return await Mediator.Send(new GetCurrentUserQuery());
+        }
+
+        [HttpPut]
+        public async Task<UserViewModel> UpdateUser([FromBody] UpdateUserCommand command)
+        {
+            _logger.LogInformation($"Update user [{HttpContext.User.Identity?.Name}]");
+            return await Mediator.Send(command);
         }
     }
 }

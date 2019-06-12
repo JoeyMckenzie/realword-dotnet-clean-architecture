@@ -3,9 +3,8 @@ namespace Conduit.Api.Controllers
     using System.Threading.Tasks;
     using Core.Users.Commands.CreateUser;
     using Core.Users.Commands.LoginUser;
-    using Domain.Entities;
     using Domain.ViewModels;
-    using Microsoft.AspNetCore.Identity;
+    using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Logging;
 
@@ -19,6 +18,8 @@ namespace Conduit.Api.Controllers
         }
 
         [HttpPost]
+        [ProducesResponseType(typeof(UserViewModel), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ErrorViewModel), StatusCodes.Status400BadRequest)]
         public async Task<UserViewModel> Register([FromBody] CreateUserCommand command)
         {
             _logger.LogInformation($"Creating user for request [{command.User.Email}]");
@@ -26,6 +27,8 @@ namespace Conduit.Api.Controllers
         }
 
         [HttpPost("login")]
+        [ProducesResponseType(typeof(UserViewModel), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ErrorViewModel), StatusCodes.Status400BadRequest)]
         public async Task<UserViewModel> Login([FromBody] LoginUserCommand command)
         {
             _logger.LogInformation($"Attempting login request for user [{command.User.Email}]");

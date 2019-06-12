@@ -3,6 +3,7 @@ namespace Conduit.Core
     using System.Reflection;
     using Users.Commands.CreateUser;
     using Users.Commands.LoginUser;
+    using Users.Commands.UpdateUser;
     using Users.Queries.GetCurrentUser;
 
     public static class ConduitRequestHandlers
@@ -13,7 +14,8 @@ namespace Conduit.Core
             {
                 typeof(CreateUserCommandHandler).Assembly,
                 typeof(LoginUserCommandHandler).Assembly,
-                typeof(GetCurrentUserQueryHandler).Assembly
+                typeof(GetCurrentUserQueryHandler).Assembly,
+                typeof(UpdateUserCommandHandler).Assembly
             };
         }
     }

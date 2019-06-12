@@ -5,7 +5,5 @@ namespace Conduit.Core.Infrastructure
     public interface ITokenService
     {
         string CreateToken(ConduitUser user);
-
-        string CreateAnonymousToken();
     }
 }
