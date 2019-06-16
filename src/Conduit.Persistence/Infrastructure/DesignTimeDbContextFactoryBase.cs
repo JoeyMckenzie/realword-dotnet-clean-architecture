@@ -17,7 +17,7 @@ namespace Conduit.Persistence.Infrastructure
                 .AddEnvironmentVariables()
                 .Build();
 
-            var connectionString = configuration["Conduit"];
+            var connectionString = configuration[ConnectionStringName];
 
             if (string.IsNullOrWhiteSpace(connectionString))
             {

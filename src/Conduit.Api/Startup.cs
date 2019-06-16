@@ -54,7 +54,6 @@
             // Add miscellaneous services
             services.AddAutoMapper(typeof(MappingProfile).GetTypeInfo().Assembly);
             services.AddTransient<IDateTime, MachineDateTime>();
-            services.AddTransient<ICurrentUserContext, CurrentUserContext>();
 
             // Add MediatR pipeline
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(RequestPreProcessorBehavior<,>));
@@ -82,6 +81,7 @@
             services.AddHealthChecks()
                 .AddDbContextCheck<ConduitDbContext>("ConduitDbContextHealthCheck");
             services.AddHealthChecks();
+            services.AddHealthChecksUI();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

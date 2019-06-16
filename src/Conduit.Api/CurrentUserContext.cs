@@ -1,11 +1,11 @@
 namespace Conduit.Api
 {
     using System;
+    using System.Net;
     using System.Threading.Tasks;
+    using Core.Exceptions;
     using Core.Infrastructure;
     using Domain.Entities;
-    using Microsoft.AspNetCore.Authentication;
-    using Microsoft.AspNetCore.Authentication.JwtBearer;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Identity;
 
@@ -33,6 +33,10 @@ namespace Conduit.Api
             if (authorizationHeader.HasValue && authorizationHeader.ToString().StartsWith("Token ", StringComparison.OrdinalIgnoreCase))
             {
                 token = authorizationHeader.ToString().Split(' ')[1];
+            }
+            else
+            {
+                throw new ConduitApiException($"Invalid token for user [{_contextAccessor.HttpContext.User?.Identity?.Name}]", HttpStatusCode.BadRequest);
             }
 
             return token;

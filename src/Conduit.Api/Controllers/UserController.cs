@@ -5,6 +5,7 @@ namespace Conduit.Api.Controllers
     using Core.Users.Queries.GetCurrentUser;
     using Domain.ViewModels;
     using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Logging;
 
@@ -19,6 +20,8 @@ namespace Conduit.Api.Controllers
         }
 
         [HttpGet]
+        [ProducesResponseType(typeof(UserViewModel), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ErrorViewModel), StatusCodes.Status400BadRequest)]
         public async Task<UserViewModel> RetrieveCurrentUser()
         {
             _logger.LogInformation("Retrieving current user");
@@ -26,6 +29,8 @@ namespace Conduit.Api.Controllers
         }
 
         [HttpPut]
+        [ProducesResponseType(typeof(UserViewModel), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ErrorViewModel), StatusCodes.Status400BadRequest)]
         public async Task<UserViewModel> UpdateUser([FromBody] UpdateUserCommand command)
         {
             _logger.LogInformation($"Update user [{HttpContext.User.Identity?.Name}]");
