@@ -1,5 +1,6 @@
 namespace Conduit.Api
 {
+    using System;
     using System.Threading.Tasks;
     using Core.Infrastructure;
     using Domain.Entities;
@@ -25,9 +26,16 @@ namespace Conduit.Api
             return await _userManager.GetUserAsync(currentHttpContext?.User);
         }
 
-        public async Task<string> GetCurrentUserToken()
+        public string GetCurrentUserToken()
         {
-            return await _contextAccessor.HttpContext.GetTokenAsync(JwtBearerDefaults.AuthenticationScheme);
+            var token = string.Empty;
+            var authorizationHeader = _contextAccessor.HttpContext.Request.Headers?["Authorization"];
+            if (authorizationHeader.HasValue && authorizationHeader.ToString().StartsWith("Token ", StringComparison.OrdinalIgnoreCase))
+            {
+                token = authorizationHeader.ToString().Split(' ')[1];
+            }
+
+            return token;
         }
     }
 }

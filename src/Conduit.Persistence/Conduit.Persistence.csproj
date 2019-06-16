@@ -3,7 +3,7 @@
   <Import Project="../../Conduit.CodeAnalysis.targets" />
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <TargetFramework>netstandard2.0</TargetFramework>
     <UserSecretsId>215683bf-c79e-4614-86c5-73b241a8365c</UserSecretsId>
   </PropertyGroup>
 

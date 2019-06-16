@@ -21,6 +21,14 @@ namespace Conduit.Core.Exceptions
             ErrorType = ConduitErrorType.Error;
         }
 
+        public ConduitApiException(string message, HttpStatusCode statusCode, ICollection<ConduitApiError> apiErrors)
+            : base(message)
+        {
+            StatusCode = statusCode;
+            ApiErrors = apiErrors;
+            ErrorType = ConduitErrorType.Error;
+        }
+
         public ConduitApiException(string message, HttpStatusCode statusCode, ConduitErrorType errorType)
             : base(message)
         {

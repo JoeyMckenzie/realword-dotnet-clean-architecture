@@ -31,6 +31,7 @@
         <Rule Id="CA1801" Action="Info" />
         <Rule Id="SA1118" Action="Info" />
         <Rule Id="CA1052" Action="Info" />
+        <Rule Id="CA1716" Action="Info" />
     </Rules>
     <Rules AnalyzerId="Microsoft.ApiDesignGuidelines.Analyzers" RuleNamespace="Microsoft.ApiDesignGuidelines.Analyzers">
     </Rules>

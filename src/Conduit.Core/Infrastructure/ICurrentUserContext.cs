@@ -7,6 +7,6 @@ namespace Conduit.Core.Infrastructure
     {
         Task<ConduitUser> GetCurrentUserContext();
 
-        Task<string> GetCurrentUserToken();
+        string GetCurrentUserToken();
     }
 }

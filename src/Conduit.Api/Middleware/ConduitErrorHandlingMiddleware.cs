@@ -74,7 +74,6 @@ namespace Conduit.Api.Middleware
                     break;
 
                 case ValidationException validationException:
-                    errorList.Add(ConduitErrorMessages.ValidationError);
                     context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
                     foreach (var validationFailure in validationException.Errors)
                     {
@@ -82,7 +81,7 @@ namespace Conduit.Api.Middleware
                         errorList.Add(conduitValidationError);
                     }
 
-                    errors = new ErrorDto(validationException.Message, errorList);
+                    errors = new ErrorDto(ConduitErrorMessages.ValidationError, errorList);
                     break;
 
                 default:

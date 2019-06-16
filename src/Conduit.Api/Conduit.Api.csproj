@@ -23,10 +23,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Filters" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\Conduit.Core\Conduit.Core.csproj" />
     <ProjectReference Include="..\Conduit.Infrastructure\Conduit.Infrastructure.csproj" />
     <ProjectReference Include="..\Conduit.Persistence\Conduit.Persistence.csproj" />

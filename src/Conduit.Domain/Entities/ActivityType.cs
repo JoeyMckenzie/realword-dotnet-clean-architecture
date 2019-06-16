@@ -8,6 +8,8 @@ namespace Conduit.Domain.Entities
         UserCreated,
         [Description("User has been retrieved")]
         UserRetrieved,
+        [Description("User has been updated")]
+        UserUpdated,
         [Description("User has logged in")]
         Login,
         [Description("User has created an article")]

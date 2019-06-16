@@ -88,6 +88,7 @@ namespace Conduit.Infrastructure.Security
         {
             return new[]
             {
+                new Claim(ClaimTypes.Name, user.Id),
                 new Claim(JwtRegisteredClaimNames.Sub, user.Id),
                 new Claim(JwtRegisteredClaimNames.Email, user.Email),
                 new Claim(JwtRegisteredClaimNames.Iss, issuer),

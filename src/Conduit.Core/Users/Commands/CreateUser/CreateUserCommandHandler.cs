@@ -39,31 +39,27 @@ namespace Conduit.Core.Users.Commands.CreateUser
 
         public async Task<UserViewModel> Handle(CreateUserCommand request, CancellationToken cancellationToken)
         {
-            // Validate the username and email are not in use
+            // Validate the username is not in use
             var existingUserByUserName = await _userManager.FindByNameAsync(request.User.Username);
-            var existingUserByEmail = await _userManager.FindByEmailAsync(request.User.Email.ToUpperInvariant());
-
             if (existingUserByUserName != null)
             {
                 throw new ConduitApiException($"Username {request.User.Username} is already in use", HttpStatusCode.BadRequest);
             }
 
+            // Validate the email is not in use
+            var existingUserByEmail = await _userManager.FindByEmailAsync(request.User.Email);
             if (existingUserByEmail != null)
             {
                 throw new ConduitApiException($"Email {request.User.Email} is already in use", HttpStatusCode.BadRequest);
             }
 
-            // Instantiate the user and create the password hash
+            // Instantiate and attempt to create the user
             var newUser = new ConduitUser
             {
                 UserName = request.User.Username,
                 Email = request.User.Email,
             };
-
-            var hashedPassword = new PasswordHasher<ConduitUser>()
-                .HashPassword(newUser, request.User.Password);
-
-            var createUserResult = await _userManager.CreateAsync(newUser, hashedPassword);
+            var createUserResult = await _userManager.CreateAsync(newUser, request.User.Password);
 
             // Instantiate the creation exception and errors, if necessary
             if (!createUserResult.Succeeded)

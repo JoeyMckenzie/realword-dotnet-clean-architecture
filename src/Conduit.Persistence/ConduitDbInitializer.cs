@@ -30,8 +30,8 @@ namespace Conduit.Persistence
         {
             var testUser1 = new ConduitUser
             {
-                Email = "joey.mckenzie27@gmail.com",
-                NormalizedEmail = "joey.mckenzie27@gmail.com".ToUpperInvariant(),
+                Email = "joey.mckenzie@gmail.com",
+                NormalizedEmail = "joey.mckenzie@gmail.com".ToUpperInvariant(),
                 UserName = "joey.mckenzie",
                 NormalizedUserName = "joey.mckenzie".ToUpperInvariant(),
                 Bio = "Lover of cheap and even cheaper wine.",
@@ -40,7 +40,7 @@ namespace Conduit.Persistence
             };
 
             testUser1.PasswordHash = new PasswordHasher<ConduitUser>()
-                .HashPassword(testUser1, "password");
+                .HashPassword(testUser1, "#password1!");
 
             var testUser2 = new ConduitUser
             {
@@ -54,7 +54,7 @@ namespace Conduit.Persistence
             };
 
             testUser2.PasswordHash = new PasswordHasher<ConduitUser>()
-                .HashPassword(testUser2, "passwordTwo");
+                .HashPassword(testUser2, "#passwordTwo1!");
 
             context.Users.Add(testUser1);
             context.Users.Add(testUser2);

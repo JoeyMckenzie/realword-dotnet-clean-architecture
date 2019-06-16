@@ -1,5 +1,6 @@
 namespace Conduit.Core.Users.Commands.UpdateUser
 {
+    using System;
     using System.Net;
     using System.Threading;
     using System.Threading.Tasks;
@@ -11,36 +12,61 @@ namespace Conduit.Core.Users.Commands.UpdateUser
     using Infrastructure;
     using MediatR;
     using Microsoft.AspNetCore.Identity;
-    using Microsoft.Extensions.Logging;
+    using Persistence;
+    using Persistence.Infrastructure;
+    using Shared.Extensions;
 
     public class UpdateUserCommandHandler : IRequestHandler<UpdateUserCommand, UserViewModel>
     {
         private readonly ICurrentUserContext _currentUserContext;
         private readonly UserManager<ConduitUser> _userManager;
-        private readonly ILogger<UpdateUserCommandHandler> _logger;
-        private readonly ITokenService _tokenService;
+        private readonly ConduitDbContext _context;
         private readonly IMapper _mapper;
 
         public UpdateUserCommandHandler(
             ICurrentUserContext currentUserContext,
             IMapper mapper,
-            ILogger<UpdateUserCommandHandler> logger,
-            ITokenService tokenService,
-            UserManager<ConduitUser> userManager)
+            UserManager<ConduitUser> userManager,
+            ConduitDbContext context)
         {
             _currentUserContext = currentUserContext;
             _mapper = mapper;
-            _logger = logger;
-            _tokenService = tokenService;
             _userManager = userManager;
+            _context = context;
         }
 
         public async Task<UserViewModel> Handle(UpdateUserCommand request, CancellationToken cancellationToken)
         {
+            // Invalidate user request that contain empty updates for username or email
+            if (request.User.Email.ExistsAndIsValid() || request.User.Username.ExistsAndIsValid())
+            {
+                throw new ConduitApiException("Requests to update username, or email, must not be empty", HttpStatusCode.BadRequest);
+            }
+
             var currentUser = await _currentUserContext.GetCurrentUserContext();
             if (currentUser == null)
             {
                 throw new ConduitApiException($"Could update user information for request email {request.User}", HttpStatusCode.BadRequest);
+            }
+
+            // Validate the email is not in use if it has changed
+            if (IsRequestPropertyAvailableForUpdate(request.User.Email, currentUser.Email))
+            {
+                var priorExistingEmail = await _userManager.FindByEmailAsync(request.User.Email);
+                if (priorExistingEmail != null)
+                {
+                    throw new ConduitApiException($"Email {request.User.Email} is already in use", HttpStatusCode.BadRequest);
+                }
+            }
+
+            // Validate the username is not in use if it has changed
+            if (IsRequestPropertyAvailableForUpdate(request.User.Username, currentUser.UserName))
+            {
+                var priorExistingUsername = await _userManager.FindByNameAsync(request.User.Username);
+                if (priorExistingUsername != null)
+                {
+                    throw new ConduitApiException($"Username {request.User.Username} is already in use", HttpStatusCode.BadRequest);
+                }
             }
 
             // Update the fields
@@ -55,9 +81,21 @@ namespace Conduit.Core.Users.Commands.UpdateUser
             {
                 User = _mapper.Map<UserDto>(currentUser)
             };
-            userViewModel.User.Token = await _currentUserContext.GetCurrentUserToken();
+            userViewModel.User.Token = _currentUserContext.GetCurrentUserToken();
+
+            await _context.AddActivityAndSaveChangesAsync(
+                ActivityType.UserUpdated,
+                TransactionType.ConduitUser,
+                currentUser.Id,
+                cancellationToken);
 
             return userViewModel;
+        }
+
+        private static bool IsRequestPropertyAvailableForUpdate(string requestProperty, string currentProperty)
+        {
+            return !string.IsNullOrWhiteSpace(requestProperty) &&
+                   !string.Equals(requestProperty, currentProperty, StringComparison.OrdinalIgnoreCase);
         }
     }
 }

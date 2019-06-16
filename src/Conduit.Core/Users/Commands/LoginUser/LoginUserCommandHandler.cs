@@ -18,7 +18,7 @@ namespace Conduit.Core.Users.Commands.LoginUser
     public class LoginUserCommandHandler : IRequestHandler<LoginUserCommand, UserViewModel>
     {
         private readonly UserManager<ConduitUser> _userManager;
-        private readonly ILogger<LoginUserCommand> _logger;
+        private readonly ILogger<LoginUserCommandHandler> _logger;
         private readonly ITokenService _tokenService;
         private readonly ConduitDbContext _context;
         private readonly IMapper _mapper;
@@ -27,7 +27,7 @@ namespace Conduit.Core.Users.Commands.LoginUser
             UserManager<ConduitUser> userManager,
             ConduitDbContext context,
             ITokenService tokenService,
-            ILogger<LoginUserCommand> logger,
+            ILogger<LoginUserCommandHandler> logger,
             IMapper mapper)
         {
             _userManager = userManager;
@@ -46,8 +46,8 @@ namespace Conduit.Core.Users.Commands.LoginUser
             }
 
             // Validate the users credentials
-            var existingUserVerifiedByPassword = await _userManager.CheckPasswordAsync(existingUser, request.User.Password);
-            if (!existingUserVerifiedByPassword)
+            var existingUserPasswordMatch = await _userManager.CheckPasswordAsync(existingUser, request.User.Password);
+            if (!existingUserPasswordMatch)
             {
                 throw new ConduitApiException($"Incorrect password attempting to login for [{existingUser.Id}] ({existingUser.Email})", HttpStatusCode.BadRequest);
             }

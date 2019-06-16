@@ -7,7 +7,7 @@ namespace Conduit.Shared.Constants
     {
         // Application Constants
         public const string ApiVersion = "0.1.0-alpha";
-        
+
         // JSON Serialization Settings
         public static readonly JsonSerializerSettings ConduitJsonSerializerSettings = new JsonSerializerSettings
         {
