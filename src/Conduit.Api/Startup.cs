@@ -1,6 +1,8 @@
 ﻿namespace Conduit.Api
 {
+    using System.Linq;
     using System.Reflection;
+    using System.Threading.Tasks;
     using AutoMapper;
     using Core;
     using Core.Infrastructure;
@@ -16,13 +18,17 @@
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Diagnostics.HealthChecks;
     using Microsoft.AspNetCore.Hosting;
+    using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.Diagnostics.HealthChecks;
     using Microsoft.Extensions.Logging;
     using Middleware;
+    using Newtonsoft.Json;
+    using Newtonsoft.Json.Linq;
     using Persistence;
     using Shared;
     using Shared.Constants;
@@ -42,6 +48,18 @@
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            // Add health checks
+            services.AddHealthChecks()
+                .AddSqlServer(
+                    Configuration["Conduit"],
+                    "SELECT 1;",
+                    "Conduit Health Query",
+                    HealthStatus.Degraded,
+                    new[] { "ConduitDb" })
+                .AddDbContextCheck<ConduitDbContext>(
+                    "ConduitDbContextHealthCheck",
+                    customTestQuery: async (context, token) => await context.ActivityLogs.AsNoTracking().ToListAsync(token) != null);
+
             // Add EF Core
             services.AddDbContext<ConduitDbContext>(options =>
                 options.UseSqlServer(Configuration["Conduit"]));
@@ -54,6 +72,7 @@
             // Add miscellaneous services
             services.AddAutoMapper(typeof(MappingProfile).GetTypeInfo().Assembly);
             services.AddTransient<IDateTime, MachineDateTime>();
+            services.AddTransient<ICurrentUserContext, CurrentUserContext>();
 
             // Add MediatR pipeline
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(RequestPreProcessorBehavior<,>));
@@ -74,14 +93,6 @@
 
             // Override built in model state validation
             services.Configure<ApiBehaviorOptions>(options => options.SuppressModelStateInvalidFilter = true);
-
-            // Add health checks
-            services.AddHealthChecks()
-                .AddSqlServer(Configuration["Conduit"]);
-            services.AddHealthChecks()
-                .AddDbContextCheck<ConduitDbContext>("ConduitDbContextHealthCheck");
-            services.AddHealthChecks();
-            services.AddHealthChecksUI();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -100,10 +111,9 @@
             // Configure health checks
             app.UseHealthChecks("/health", new HealthCheckOptions
             {
-                Predicate = _ => true,
                 ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse,
+                AllowCachingResponses = false
             });
-            app.UseHealthChecksUI();
             app.UseConduitErrorHandlingMiddleware();
             app.UseSwagger();
             app.UseSwaggerUI(options =>

@@ -1,5 +1,6 @@
 namespace Conduit.Domain.Dtos
 {
+    using System;
     using System.Collections.Generic;
 
     public class ArticleDto
@@ -12,12 +13,16 @@ namespace Conduit.Domain.Dtos
 
         public string Body { get; set; }
 
-        public ICollection<string> TagList { get; set; }
+        public IEnumerable<string> TagList { get; set; }
 
         public bool Favorited { get; set; }
 
-        public bool FavoritesCount { get; set; }
+        public int FavoritesCount { get; set; }
 
         public AuthorDto Author { get; set; }
+
+        public DateTime CreatedAt { get; set; }
+
+        public DateTime UpdatedAt { get; set; }
     }
 }

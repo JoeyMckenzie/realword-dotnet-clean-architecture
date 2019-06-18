@@ -23,13 +23,13 @@ namespace Conduit.Api.Filters
                 // Retrieve all model state errors
                 var modelErrors = modelState.Keys.SelectMany(key => modelState[key].Errors);
 
-                // Build a list of BrewdudeApiErrors to return to the request pipeline
+                // Build a list of ConduitApiErrors to return to the request pipeline
                 var conduitApiErrors = modelErrors.Select(modelError => new ConduitApiError(modelError.ErrorMessage)).ToList();
 
                 // Instantiate the exception
                 var conduitApiException = new ConduitApiException(
                     $"Invalid model state during request to [{context.Controller.GetType().Name}]. Trace ID: [{context.HttpContext.TraceIdentifier}]",
-                    HttpStatusCode.BadRequest,
+                    HttpStatusCode.UnsupportedMediaType,
                     conduitApiErrors);
 
                 // Throw the API exception to be caught during the pipeline

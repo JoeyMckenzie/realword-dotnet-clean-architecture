@@ -13,7 +13,7 @@ namespace Conduit.Shared.Tests.Extensions
             var emptyStringValue = string.Empty;
 
             // Act
-            var result = emptyStringValue.ExistsAndIsValid();
+            var result = emptyStringValue.IsValidEmptyString();
 
             // Assert
             result.ShouldBeTrue();
@@ -26,10 +26,24 @@ namespace Conduit.Shared.Tests.Extensions
         public void ExistsAndIsValid_GivenNullOrNonEmptyValues_ReturnsFalse(string value)
         {
             // Arrange/Act
-            var result = value.ExistsAndIsValid();
+            var result = value.IsValidEmptyString();
 
             // Assert
             result.ShouldBeFalse();
+        }
+
+        [Fact]
+        public void ToSlug_GivenStringPhrase_ReturnsSlugifiedVersion()
+        {
+            // Arrange
+            const string testPhrase = "I love burritos and beer!";
+            const string expectedSlug = "i-love-burritos-and-beer";
+
+            // Act
+            var actualSlug = testPhrase.ToSlug();
+
+            // Assert
+            actualSlug.ShouldBe(expectedSlug);
         }
     }
 }

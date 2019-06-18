@@ -23,6 +23,13 @@ namespace Conduit.Api
         public async Task<ConduitUser> GetCurrentUserContext()
         {
             var currentHttpContext = _contextAccessor.HttpContext;
+            var currentUser = await _userManager.GetUserAsync(currentHttpContext?.User);
+
+            if (currentUser == null)
+            {
+                throw new ConduitApiException("User was not found", HttpStatusCode.BadRequest);
+            }
+
             return await _userManager.GetUserAsync(currentHttpContext?.User);
         }
 

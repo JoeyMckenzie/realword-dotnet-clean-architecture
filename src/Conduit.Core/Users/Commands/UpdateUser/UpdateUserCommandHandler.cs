@@ -38,16 +38,12 @@ namespace Conduit.Core.Users.Commands.UpdateUser
         public async Task<UserViewModel> Handle(UpdateUserCommand request, CancellationToken cancellationToken)
         {
             // Invalidate user request that contain empty updates for username or email
-            if (request.User.Email.ExistsAndIsValid() || request.User.Username.ExistsAndIsValid())
+            if (request.User.Email.IsValidEmptyString() || request.User.Username.IsValidEmptyString())
             {
                 throw new ConduitApiException("Requests to update username, or email, must not be empty", HttpStatusCode.BadRequest);
             }
 
             var currentUser = await _currentUserContext.GetCurrentUserContext();
-            if (currentUser == null)
-            {
-                throw new ConduitApiException($"Could update user information for request email {request.User}", HttpStatusCode.BadRequest);
-            }
 
             // Validate the email is not in use if it has changed
             if (IsRequestPropertyAvailableForUpdate(request.User.Email, currentUser.Email))

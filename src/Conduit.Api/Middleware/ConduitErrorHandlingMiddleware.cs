@@ -74,7 +74,7 @@ namespace Conduit.Api.Middleware
                     break;
 
                 case ValidationException validationException:
-                    context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                    context.Response.StatusCode = (int)HttpStatusCode.UnsupportedMediaType;
                     foreach (var validationFailure in validationException.Errors)
                     {
                         var conduitValidationError = new ConduitApiError(validationFailure.ErrorMessage, validationFailure.PropertyName);
