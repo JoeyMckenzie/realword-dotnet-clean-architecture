@@ -17,7 +17,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\src\Conduit.Api\Conduit.Api.csproj" />
       <ProjectReference Include="..\..\src\Conduit.Core\Conduit.Core.csproj" />
     </ItemGroup>
 

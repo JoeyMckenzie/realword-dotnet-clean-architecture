@@ -45,5 +45,19 @@ namespace Conduit.Shared.Tests.Extensions
             // Assert
             actualSlug.ShouldBe(expectedSlug);
         }
+
+        [Fact]
+        public void ToSlug_GivenStringPhraseWithSpecialCharacters_ReturnsSlugifiedVersionWithoutSpecialCharacters()
+        {
+            // Arrange
+            const string testPhrase = "I love .NET Core and C#!";
+            const string expectedSlug = "i-love-net-core-and-c";
+
+            // Act
+            var actualSlug = testPhrase.ToSlug();
+
+            // Assert
+            actualSlug.ShouldBe(expectedSlug);
+        }
     }
 }

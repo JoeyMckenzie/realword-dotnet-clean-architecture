@@ -1,7 +1,9 @@
 namespace Conduit.Core.Infrastructure
 {
+    using System.Linq;
     using AutoMapper;
     using Domain.Dtos;
+    using Domain.Dtos.Articles;
     using Domain.Entities;
     using Domain.ViewModels;
 
@@ -23,7 +25,8 @@ namespace Conduit.Core.Infrastructure
                 .ForMember(a => a.Username, m => m.MapFrom(cu => cu.UserName));
 
             // Article mappings
-            CreateMap<Article, ArticleDto>();
+            CreateMap<Article, ArticleDto>()
+                .ForMember(a => a.TagList, m => m.MapFrom(a => a.ArticleTags.Select(at => at.Tag.Description)));
 
             // Tag mappings
             CreateMap<Tag, TagDto>();

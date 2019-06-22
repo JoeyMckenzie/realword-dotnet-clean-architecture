@@ -1,5 +1,8 @@
 namespace Conduit.Persistence
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
     using Domain.Entities;
     using Microsoft.AspNetCore.Identity;
 
@@ -81,7 +84,16 @@ namespace Conduit.Persistence
                 AuthorId = userId
             };
 
-            context.Articles.Add(testArticle);
+            var testArticleByAnotherUser = new Article
+            {
+                Title = "Why Beer is God's Gift to the World",
+                Description = "It really is",
+                Body = "WE MUST DRINK IT ALL.",
+                Slug = "why-beer-is-gods-gift-to-the-world",
+                AuthorId = context.Users.FirstOrDefault(u => string.Equals(u.UserName, "test.user", StringComparison.OrdinalIgnoreCase))?.Id
+            };
+
+            context.Articles.AddRange(testArticle, testArticleByAnotherUser);
             context.SaveChanges();
             articleId = testArticle.Id;
         }
@@ -103,8 +115,14 @@ namespace Conduit.Persistence
                 Description = "training"
             };
 
+            var testTag3 = new Tag
+            {
+                Description = "beer"
+            };
+
             context.Tags.Add(testTag1);
             context.Tags.Add(testTag2);
+            context.Tags.Add(testTag3);
             context.SaveChanges();
 
             var testArticleTag1 = new ArticleTag
@@ -119,8 +137,15 @@ namespace Conduit.Persistence
                 TagId = testTag2.Id
             };
 
+            var testArticleTag3 = new ArticleTag
+            {
+                ArticleId = context.Articles.FirstOrDefault(a => a.Slug == "why-beer-is-gods-gift-to-the-world").Id,
+                TagId = testTag3.Id
+            };
+
             context.ArticleTags.Add(testArticleTag1);
             context.ArticleTags.Add(testArticleTag2);
+            context.ArticleTags.Add(testArticleTag3);
             context.SaveChanges();
         }
 

@@ -58,7 +58,7 @@ namespace Conduit.Core.Tests.Infrastructure
 
         protected ICurrentUserContext CurrentUserContext { get; }
 
-        private IDateTime MachineDateTime { get; }
+        protected IDateTime MachineDateTime { get; }
 
         public void Dispose()
         {

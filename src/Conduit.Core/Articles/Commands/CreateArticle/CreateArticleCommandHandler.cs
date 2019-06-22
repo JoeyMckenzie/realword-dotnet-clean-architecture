@@ -5,7 +5,7 @@ namespace Conduit.Core.Articles.Commands.CreateArticle
     using System.Threading;
     using System.Threading.Tasks;
     using AutoMapper;
-    using Domain.Dtos;
+    using Domain.Dtos.Articles;
     using Domain.Entities;
     using Domain.ViewModels;
     using Infrastructure;
@@ -13,6 +13,7 @@ namespace Conduit.Core.Articles.Commands.CreateArticle
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Logging;
     using Persistence;
+    using Persistence.Infrastructure;
     using Shared;
     using Shared.Extensions;
 
@@ -89,6 +90,10 @@ namespace Conduit.Core.Articles.Commands.CreateArticle
             }
 
             await _context.Articles.AddAsync(newArticle, cancellationToken);
+            await _context.AddActivityAsync(
+                ActivityType.ArticleCreate,
+                TransactionType.Article,
+                newArticle.Id.ToString());
             await _context.SaveChangesAsync(cancellationToken);
 
             // Map to the view model
@@ -96,7 +101,6 @@ namespace Conduit.Core.Articles.Commands.CreateArticle
             {
                 Article = _mapper.Map<ArticleDto>(newArticle)
             };
-            viewModel.Article.TagList = newArticle.ArticleTags.Select(at => at.Tag.Description);
 
             return viewModel;
         }

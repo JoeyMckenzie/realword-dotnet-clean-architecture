@@ -8,7 +8,7 @@ namespace Conduit.Persistence.Infrastructure
 
     public static class DbContextExtensions
     {
-        public static void AddActivity(
+        public static async Task AddActivityAsync(
             this ConduitDbContext dbContext,
             ActivityType activityType,
             TransactionType transactionType,
@@ -22,7 +22,7 @@ namespace Conduit.Persistence.Infrastructure
                 CreatedAt = DateTime.UtcNow,
                 UpdatedAt = DateTime.UtcNow
             };
-            dbContext.ActivityLogs.Add(activityLog);
+            await dbContext.ActivityLogs.AddAsync(activityLog);
         }
 
         public static async Task AddActivityAndSaveChangesAsync(
@@ -32,7 +32,7 @@ namespace Conduit.Persistence.Infrastructure
             string transactionId,
             CancellationToken cancellationToken)
         {
-            AddActivity(dbContext, activityType, transactionType, transactionId);
+            await AddActivityAsync(dbContext, activityType, transactionType, transactionId);
             await dbContext.SaveChangesAsync(cancellationToken);
         }
     }

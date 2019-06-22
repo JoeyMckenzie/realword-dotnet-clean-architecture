@@ -17,7 +17,8 @@ namespace Conduit.Core
                 typeof(LoginUserCommandHandler).Assembly,
                 typeof(GetCurrentUserQueryHandler).Assembly,
                 typeof(UpdateUserCommandHandler).Assembly,
-                typeof(CreateArticleCommandHandler).Assembly
+                typeof(CreateArticleCommandHandler).Assembly,
+                typeof(UpdateUserCommandHandler).Assembly
             };
         }
     }

@@ -1,4 +1,4 @@
-namespace Conduit.Domain.Dtos
+namespace Conduit.Domain.Dtos.Articles
 {
     using System;
     using System.Collections.Generic;

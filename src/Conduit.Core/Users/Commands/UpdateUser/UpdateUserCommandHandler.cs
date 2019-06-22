@@ -66,10 +66,10 @@ namespace Conduit.Core.Users.Commands.UpdateUser
             }
 
             // Update the fields
-            currentUser.Email = request.User.Email ?? request.User.Email;
-            currentUser.UserName = request.User.Username ?? request.User.Username;
-            currentUser.Bio = request.User.Bio ?? request.User.Bio;
-            currentUser.Image = request.User.Image ?? request.User.Image;
+            currentUser.Email = request.User.Email ?? currentUser.Email;
+            currentUser.UserName = request.User.Username ?? currentUser.Email;
+            currentUser.Bio = request.User.Bio ?? currentUser.Email;
+            currentUser.Image = request.User.Image ?? currentUser.Email;
             await _userManager.UpdateAsync(currentUser);
 
             // Map the response
