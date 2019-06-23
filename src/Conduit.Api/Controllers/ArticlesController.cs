@@ -2,6 +2,7 @@ namespace Conduit.Api.Controllers
 {
     using System.Threading.Tasks;
     using Core.Articles.Commands.CreateArticle;
+    using Core.Articles.Commands.DeleteArticle;
     using Core.Articles.Commands.UpdateArticle;
     using Domain.ViewModels;
     using Microsoft.AspNetCore.Authorization;
@@ -37,6 +38,16 @@ namespace Conduit.Api.Controllers
             _logger.LogInformation($"Updating article [{slug}]");
             command.Slug = slug;
             return await Mediator.Send(command);
+        }
+
+        [HttpDelete("{slug}")]
+        [ProducesResponseType(typeof(OkResult), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ErrorViewModel), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ErrorViewModel), StatusCodes.Status404NotFound)]
+        public async Task<ActionResult> DeleteArticle(string slug)
+        {
+            _logger.LogInformation($"Deleting article [{slug}]");
+            return Ok(await Mediator.Send(new DeleteArticleCommand(slug)));
         }
     }
 }
