@@ -1,13 +1,12 @@
 namespace Conduit.Integration.Tests.Infrastructure
 {
-    using System.Net;
     using System.Net.Http;
     using System.Net.Http.Headers;
     using System.Text;
     using System.Threading.Tasks;
     using Core.Users.Commands.LoginUser;
-    using Domain.Dtos;
     using Domain.ViewModels;
+    using Microsoft.AspNetCore.Authentication.JwtBearer;
     using Newtonsoft.Json;
 
     public static class ContentHelper
@@ -17,22 +16,24 @@ namespace Conduit.Integration.Tests.Infrastructure
             return new StringContent(JsonConvert.SerializeObject(request), Encoding.UTF8, "application/json");
         }
 
-        public static async Task<StringContent> GetRequestContentWithAuthorization(object request, HttpClient client)
+        public static async Task<StringContent> GetRequestContentWithAuthorization(object request, HttpClient client, LoginUserCommand user = null)
         {
-            var seedUserLoginRequest = new LoginUserCommand
-            {
-                User = new UserLoginDto
-                {
-                    Email = "joey.mckenzie@gmail.com",
-                    Password = "#password1!"
-                }
-            };
-
+            var seedUserLoginRequest = user == null ? IntegrationTestConstants.PrimaryUser : IntegrationTestConstants.SecondaryUser;
             var response = await client.PostAsync("/api/users/login", GetRequestContent(seedUserLoginRequest));
             var responseContent = await GetResponseContent<UserViewModel>(response);
 
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", responseContent.User.Token);
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(JwtBearerDefaults.AuthenticationScheme, responseContent.User.Token);
             return GetRequestContent(request);
+        }
+
+        public static async Task<StringContent> GetRequestWithAuthorization(HttpClient client, LoginUserCommand user = null)
+        {
+            var seedUserLoginRequest = user == null ? IntegrationTestConstants.PrimaryUser : IntegrationTestConstants.SecondaryUser;
+            var response = await client.PostAsync("/api/users/login", GetRequestContent(seedUserLoginRequest));
+            var responseContent = await GetResponseContent<UserViewModel>(response);
+
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(JwtBearerDefaults.AuthenticationScheme, responseContent.User.Token);
+            return GetRequestContent(null);
         }
 
         public static async Task<T> GetResponseContent<T>(HttpResponseMessage response)

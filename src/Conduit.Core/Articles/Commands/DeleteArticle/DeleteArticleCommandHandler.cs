@@ -35,7 +35,7 @@ namespace Conduit.Core.Articles.Commands.DeleteArticle
 
             if (articleToDelete == null)
             {
-                throw new ConduitApiException($"Article [{request.Slug}] was not found by user [{currentUser.Email}]", HttpStatusCode.BadRequest);
+                throw new ConduitApiException($"Article [{request.Slug}] was not found by user [{currentUser.Email}]", HttpStatusCode.Unauthorized);
             }
 
             _context.Remove(articleToDelete);
