@@ -13,7 +13,7 @@ namespace Conduit.Integration.Tests.Articles
         private const string ArticlesEndpoint = "/api/articles";
 
         [Fact]
-        public async Task GivenValidDeleteArticle_WhenTheArticleExistsAndIsOwnedByTheUser_ReturnsSuccessfulResponse()
+        public async Task GivenValidDeleteArticleRequest_WhenTheArticleExistsAndIsOwnedByTheUser_ReturnsSuccessfulResponse()
         {
             // Arrange
             var deleteArticleCommand = new DeleteArticleCommand("how-to-train-your-dragon");
@@ -27,7 +27,25 @@ namespace Conduit.Integration.Tests.Articles
         }
 
         [Fact]
-        public async Task GivenValidDeleteArticle_WhenTheArticleExistsAndIsNotOwnedByTheUser_ReturnsErrorViewModelForUnauthorized()
+        public async Task GivenValidDeleteArticleRequest_WhenTheArticleDoesNotExist_ReturnsErrorViewModelForNotFound()
+        {
+            // Arrange
+            var deleteArticleCommand = new DeleteArticleCommand("this-is-a-fake-article");
+            await ContentHelper.GetRequestWithAuthorization(Client);
+
+            // Act
+            var response = await Client.DeleteAsync($"{ArticlesEndpoint}/{deleteArticleCommand.Slug}");
+            var responseContent = await ContentHelper.GetResponseContent<ErrorViewModel>(response);
+
+            // Assert
+            response.StatusCode.ShouldBe(HttpStatusCode.NotFound);
+            responseContent.ShouldNotBeNull();
+            responseContent.ShouldBeOfType<ErrorViewModel>();
+            responseContent.Errors.ShouldNotBeNull();
+        }
+
+        [Fact]
+        public async Task GivenValidDeleteArticleRequest_WhenTheArticleExistsAndIsNotOwnedByTheUser_ReturnsErrorViewModelForUnauthorized()
         {
             // Arrange
             var deleteArticleCommand = new DeleteArticleCommand("how-to-train-your-dragon");

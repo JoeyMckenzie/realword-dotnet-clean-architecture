@@ -2,6 +2,7 @@ namespace Conduit.Integration.Tests
 {
     using Core.Users.Commands.LoginUser;
     using Domain.Dtos;
+    using Domain.Dtos.Users;
 
     public static class IntegrationTestConstants
     {

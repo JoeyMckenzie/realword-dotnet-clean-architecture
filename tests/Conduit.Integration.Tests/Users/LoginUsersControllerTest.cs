@@ -4,6 +4,7 @@ namespace Conduit.Integration.Tests.Users
     using System.Threading.Tasks;
     using Core.Users.Commands.LoginUser;
     using Domain.Dtos;
+    using Domain.Dtos.Users;
     using Domain.ViewModels;
     using Infrastructure;
     using Shouldly;

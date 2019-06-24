@@ -4,6 +4,7 @@ namespace Conduit.Core.Tests.Articles
     using System.Threading;
     using System.Threading.Tasks;
     using Core.Articles.Commands.DeleteArticle;
+    using Exceptions;
     using Infrastructure;
     using Microsoft.Extensions.Logging;
     using Microsoft.Extensions.Logging.Abstractions;
@@ -33,6 +34,40 @@ namespace Conduit.Core.Tests.Articles
             // Assert, verify removal from the database
             result.ShouldNotBeNull();
             Context.Articles.FirstOrDefault(a => a.Slug == "Why Beer is God's Gift to the World".ToSlug())?.ShouldBeNull();
+        }
+
+        [Fact]
+        public async Task GivenTheRequestIsValid_WhenTheUserDoesNotOwnTheArticle_ThrowsApiExceptionForNotFound()
+        {
+            // Arrange
+            var deleteArticleCommand = new DeleteArticleCommand("How to train your dragon".ToSlug());
+
+            // Act
+            var request = new DeleteArticleCommandHandler(_logger, Context, CurrentUserContext);
+
+            // Assert
+            await Should.ThrowAsync<ConduitApiException>(async () =>
+            {
+                await request.Handle(deleteArticleCommand, CancellationToken.None);
+            });
+            Context.Articles.FirstOrDefault(a => a.Slug == "How to train your dragon".ToSlug()).ShouldNotBeNull();
+        }
+
+        [Fact]
+        public async Task GivenTheRequestIsValid_WhenTheArticleDoesNotExist_ThrowsApiExceptionForNotFound()
+        {
+            // Arrange
+            var deleteArticleCommand = new DeleteArticleCommand("How to train your dragon".ToSlug());
+
+            // Act
+            var request = new DeleteArticleCommandHandler(_logger, Context, CurrentUserContext);
+
+            // Assert
+            await Should.ThrowAsync<ConduitApiException>(async () =>
+            {
+                await request.Handle(deleteArticleCommand, CancellationToken.None);
+            });
+            Context.Articles.FirstOrDefault(a => a.Slug == "How to train your dragon".ToSlug()).ShouldNotBeNull();
         }
     }
 }

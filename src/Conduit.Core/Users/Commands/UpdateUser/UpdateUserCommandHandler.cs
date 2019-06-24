@@ -6,6 +6,7 @@ namespace Conduit.Core.Users.Commands.UpdateUser
     using System.Threading.Tasks;
     using AutoMapper;
     using Domain.Dtos;
+    using Domain.Dtos.Users;
     using Domain.Entities;
     using Domain.ViewModels;
     using Exceptions;

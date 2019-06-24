@@ -5,6 +5,7 @@ namespace Conduit.Core.Tests.Users
     using System.Threading.Tasks;
     using Core.Users.Commands.CreateUser;
     using Domain.Dtos;
+    using Domain.Dtos.Users;
     using Domain.Entities;
     using Domain.ViewModels;
     using Exceptions;

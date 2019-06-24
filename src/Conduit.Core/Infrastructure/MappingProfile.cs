@@ -4,6 +4,7 @@ namespace Conduit.Core.Infrastructure
     using AutoMapper;
     using Domain.Dtos;
     using Domain.Dtos.Articles;
+    using Domain.Dtos.Users;
     using Domain.Entities;
     using Domain.ViewModels;
 

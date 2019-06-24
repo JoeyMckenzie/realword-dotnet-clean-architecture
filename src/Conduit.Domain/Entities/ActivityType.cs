@@ -14,6 +14,8 @@ namespace Conduit.Domain.Entities
         Login,
         [Description("User has created an article")]
         ArticleCreate,
+        [Description("User has deleted an article")]
+        ArticleDelete,
         [Description("User has favorited an article")]
         UserFavorite,
         [Description("User has followed another user")]

@@ -6,6 +6,7 @@ namespace Conduit.Integration.Tests.Users
     using Api;
     using Core.Users.Commands.CreateUser;
     using Domain.Dtos;
+    using Domain.Dtos.Users;
     using Domain.ViewModels;
     using Infrastructure;
     using Shouldly;

@@ -26,14 +26,14 @@ namespace Conduit.Integration.Tests.Infrastructure
             return GetRequestContent(request);
         }
 
-        public static async Task<StringContent> GetRequestWithAuthorization(HttpClient client, LoginUserCommand user = null)
+        public static async Task GetRequestWithAuthorization(HttpClient client, LoginUserCommand user = null)
         {
             var seedUserLoginRequest = user == null ? IntegrationTestConstants.PrimaryUser : IntegrationTestConstants.SecondaryUser;
             var response = await client.PostAsync("/api/users/login", GetRequestContent(seedUserLoginRequest));
             var responseContent = await GetResponseContent<UserViewModel>(response);
 
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(JwtBearerDefaults.AuthenticationScheme, responseContent.User.Token);
-            return GetRequestContent(null);
+            GetRequestContent(null);
         }
 
         public static async Task<T> GetResponseContent<T>(HttpResponseMessage response)

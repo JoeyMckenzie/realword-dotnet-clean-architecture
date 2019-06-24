@@ -1,6 +1,7 @@
 namespace Conduit.Core.Users.Commands.CreateUser
 {
     using Domain.Dtos;
+    using Domain.Dtos.Users;
     using Domain.ViewModels;
     using MediatR;
 

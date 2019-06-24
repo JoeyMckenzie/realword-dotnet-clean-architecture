@@ -4,6 +4,7 @@ namespace Conduit.Core.Tests.Users
     using System.Threading.Tasks;
     using Core.Users.Commands.LoginUser;
     using Domain.Dtos;
+    using Domain.Dtos.Users;
     using Exceptions;
     using Infrastructure;
     using Microsoft.Extensions.Logging;
