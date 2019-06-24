@@ -1,5 +1,6 @@
 namespace Conduit.Core.Tests.Articles
 {
+    using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
     using Core.Articles.Commands.DeleteArticle;
@@ -7,6 +8,7 @@ namespace Conduit.Core.Tests.Articles
     using Microsoft.Extensions.Logging;
     using Microsoft.Extensions.Logging.Abstractions;
     using Shared.Extensions;
+    using Shouldly;
     using Xunit;
 
     public class DeleteArticleCommandHandlerTest : TestFixture
@@ -28,7 +30,9 @@ namespace Conduit.Core.Tests.Articles
             var request = new DeleteArticleCommandHandler(_logger, Context, CurrentUserContext);
             var result = await request.Handle(deleteArticleCommand, CancellationToken.None);
 
-            // Assert
+            // Assert, verify removal from the database
+            result.ShouldNotBeNull();
+            Context.Articles.FirstOrDefault(a => a.Slug == "Why Beer is God's Gift to the World".ToSlug())?.ShouldBeNull();
         }
     }
 }
