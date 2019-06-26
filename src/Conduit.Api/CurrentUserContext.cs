@@ -35,7 +35,7 @@ namespace Conduit.Api
 
         public string GetCurrentUserToken()
         {
-            var token = string.Empty;
+            string token;
             var authorizationHeader = _contextAccessor.HttpContext.Request.Headers?["Authorization"];
             if (authorizationHeader.HasValue && authorizationHeader.ToString().StartsWith("Token ", StringComparison.OrdinalIgnoreCase))
             {

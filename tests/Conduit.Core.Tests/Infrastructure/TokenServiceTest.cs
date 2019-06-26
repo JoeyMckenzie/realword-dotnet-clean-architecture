@@ -7,7 +7,7 @@ namespace Conduit.Core.Tests.Infrastructure
     {
         public string CreateToken(ConduitUser user)
         {
-            return TestConstants.TokenStringMock;
+            return "aSecurityToken";
         }
     }
 }

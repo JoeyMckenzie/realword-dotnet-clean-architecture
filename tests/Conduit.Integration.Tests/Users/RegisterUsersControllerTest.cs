@@ -71,7 +71,7 @@ namespace Conduit.Integration.Tests.Users
         }
 
         [Fact]
-        public async Task GivenAUserCreateRequest_WhenRequestIsMissingProperties_ReturnsErrorResponseForValidation()
+        public async Task GivenAUserCreateRequest_WhenRequestIsMissingProperties_ReturnsErrorResponseForUnsupportedMediaType()
         {
             // Arrange
             var createUserRequest = new CreateUserCommand

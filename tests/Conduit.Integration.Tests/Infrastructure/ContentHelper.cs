@@ -32,7 +32,7 @@ namespace Conduit.Integration.Tests.Infrastructure
             var response = await client.PostAsync("/api/users/login", GetRequestContent(seedUserLoginRequest));
             var responseContent = await GetResponseContent<UserViewModel>(response);
 
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(JwtBearerDefaults.AuthenticationScheme, responseContent.User.Token);
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Token", responseContent.User.Token);
             GetRequestContent(null);
         }
 

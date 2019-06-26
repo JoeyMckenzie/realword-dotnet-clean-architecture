@@ -7,6 +7,6 @@ namespace Conduit.Core.Users.Commands.UpdateUser
 
     public class UpdateUserCommand : IRequest<UserViewModel>
     {
-        public UserDto User { get; set; }
+        public UserUpdateDto User { get; set; }
     }
 }
