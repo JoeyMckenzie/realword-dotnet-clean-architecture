@@ -59,7 +59,7 @@ namespace Conduit.Core.Articles.Commands.UpdateArticle
             // Invalidate the request if the user is not the author of the article
             if (!string.Equals(articleToUpdate.AuthorId, currentUser.Id, StringComparison.OrdinalIgnoreCase))
             {
-                throw new ConduitApiException($"User [{currentUser.Email}] does not own article [{request.Slug}] and may not update it", HttpStatusCode.BadRequest);
+                throw new ConduitApiException($"User [{currentUser.Email}] does not own article [{request.Slug}] and may not update it", HttpStatusCode.Forbidden);
             }
 
             // Update the article slug, if it exists

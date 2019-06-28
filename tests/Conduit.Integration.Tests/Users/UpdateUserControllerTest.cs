@@ -218,5 +218,27 @@ namespace Conduit.Integration.Tests.Users
             responseContent.ShouldBeOfType<ErrorViewModel>();
             responseContent.Errors.ShouldNotBeNull();
         }
+
+        [Fact]
+        public async Task GivenInvalidUserUpdateRequest_WhenTheRequestIsMissingUserDto_ReturnsErrorViewModelWithInternalServerError()
+        {
+            // Arrange
+            var updateUserRequest = new UpdateUserCommand
+            {
+                User = null
+            };
+            await ContentHelper.GetRequestWithAuthorization(Client);
+            var request = ContentHelper.GetRequestContent(updateUserRequest);
+
+            // Act
+            var response = await Client.PutAsync(UpdateUserEndpoint, request);
+            var responseContent = await ContentHelper.GetResponseContent<ErrorViewModel>(response);
+
+            // Assert
+            response.StatusCode.ShouldBe(HttpStatusCode.InternalServerError);
+            responseContent.ShouldNotBeNull();
+            responseContent.ShouldBeOfType<ErrorViewModel>();
+            responseContent.Errors.ShouldNotBeNull();
+        }
     }
 }

@@ -31,6 +31,12 @@ namespace Conduit.Core.Infrastructure
 
             // Tag mappings
             CreateMap<Tag, TagDto>();
+
+            // Profile Mappings
+            CreateMap<ConduitUser, ProfileDto>()
+                .ForMember(u => u.Username, m => m.MapFrom(u => u.UserName))
+                .ForMember(u => u.Bio, m => m.MapFrom(u => u.Bio))
+                .ForMember(u => u.Image, m => m.MapFrom(u => u.Image));
         }
     }
 }

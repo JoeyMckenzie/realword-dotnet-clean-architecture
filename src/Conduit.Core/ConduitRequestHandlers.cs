@@ -3,6 +3,7 @@ namespace Conduit.Core
     using System.Reflection;
     using Articles.Commands.CreateArticle;
     using Articles.Commands.DeleteArticle;
+    using Profiles.Queries.GetProfile;
     using Users.Commands.CreateUser;
     using Users.Commands.LoginUser;
     using Users.Commands.UpdateUser;
@@ -20,7 +21,8 @@ namespace Conduit.Core
                 typeof(UpdateUserCommandHandler).Assembly,
                 typeof(CreateArticleCommandHandler).Assembly,
                 typeof(UpdateUserCommandHandler).Assembly,
-                typeof(DeleteArticleCommand).Assembly
+                typeof(DeleteArticleCommand).Assembly,
+                typeof(GetProfileQueryQueryHandler).Assembly
             };
         }
     }
