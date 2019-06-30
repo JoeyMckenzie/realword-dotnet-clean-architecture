@@ -1,7 +1,6 @@
 namespace Conduit.Persistence
 {
     using System;
-    using System.Collections.Generic;
     using System.Linq;
     using Domain.Entities;
     using Microsoft.AspNetCore.Identity;
@@ -17,7 +16,6 @@ namespace Conduit.Persistence
         {
             SeedConduitUsers(context, out string userId, out string testUserId);
             SeedUserFollows(context, testUserId, userId);
-            SeedUserFollows(context, userId, testUserId);
             SeedArticles(context, userId, out int articleId);
             SeedFavorites(context, articleId, testUserId);
             SeedTags(context, articleId);
@@ -29,6 +27,7 @@ namespace Conduit.Persistence
         /// </summary>
         /// <param name="context">Conduit database context</param>
         /// <param name="userId">Out parameter passed to subsequent seeder methods</param>
+        /// <param name="testUserId">Secondary out parameter passed to subsequent seeder methods</param>
         private static void SeedConduitUsers(ConduitDbContext context, out string userId, out string testUserId)
         {
             var testUser1 = new ConduitUser
@@ -176,12 +175,15 @@ namespace Conduit.Persistence
         /// <param name="followeeId">The user receiving the follow</param>
         private static void SeedUserFollows(ConduitDbContext context, string followerId, string followeeId)
         {
+            var userFollower = context.Users.Find(followerId);
+            var userFollowee = context.Users.Find(followeeId);
             var userFollow = new UserFollow
             {
-                UserFollowerId = followerId,
-                UserFollowingId = followeeId
+                UserFollower = userFollower,
+                UserFollowing = userFollowee
             };
 
+            userFollowee.Followers.Add(userFollow);
             context.UserFollows.Add(userFollow);
             context.SaveChanges();
         }

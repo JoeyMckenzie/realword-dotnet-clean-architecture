@@ -11,8 +11,6 @@ namespace Conduit.Integration.Tests.Articles
 
     public class CreateArticlesControllerTest : ControllerBaseTestFixture
     {
-        private const string CreateArticleEndpoint = "/api/articles";
-
         [Fact]
         public async Task GivenValidCreateRequest_WhenTheUserIsVerified_ReturnsArticleViewModelWithSuccessfulResponse()
         {
@@ -30,7 +28,7 @@ namespace Conduit.Integration.Tests.Articles
             var requestContent = await ContentHelper.GetRequestContentWithAuthorization(createArticleCommand, Client);
 
             // Act
-            var response = await Client.PostAsync(CreateArticleEndpoint, requestContent);
+            var response = await Client.PostAsync(ArticlesEndpoint, requestContent);
             var responseContent = await ContentHelper.GetResponseContent<ArticleViewModel>(response);
 
             // Assert
@@ -62,7 +60,7 @@ namespace Conduit.Integration.Tests.Articles
             var requestContent = ContentHelper.GetRequestContent(createArticleCommand);
 
             // Act
-            var response = await Client.PostAsync(CreateArticleEndpoint, requestContent);
+            var response = await Client.PostAsync(ArticlesEndpoint, requestContent);
             var responseContent = await ContentHelper.GetResponseContent<ArticleViewModel>(response);
 
             // Assert
@@ -84,7 +82,7 @@ namespace Conduit.Integration.Tests.Articles
             var requestContent = await ContentHelper.GetRequestContentWithAuthorization(createArticleCommand, Client);
 
             // Act
-            var response = await Client.PostAsync(CreateArticleEndpoint, requestContent);
+            var response = await Client.PostAsync(ArticlesEndpoint, requestContent);
             var responseContent = await ContentHelper.GetResponseContent<ErrorViewModel>(response);
 
             // Assert
@@ -110,7 +108,7 @@ namespace Conduit.Integration.Tests.Articles
             var requestContent = await ContentHelper.GetRequestContentWithAuthorization(createArticleCommand, Client);
 
             // Act
-            var response = await Client.PostAsync(CreateArticleEndpoint, requestContent);
+            var response = await Client.PostAsync(ArticlesEndpoint, requestContent);
             var responseContent = await ContentHelper.GetResponseContent<ArticleViewModel>(response);
 
             // Assert

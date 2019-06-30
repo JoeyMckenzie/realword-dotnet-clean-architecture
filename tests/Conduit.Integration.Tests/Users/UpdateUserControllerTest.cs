@@ -12,8 +12,6 @@ namespace Conduit.Integration.Tests.Users
 
     public class UpdateUserControllerTest : ControllerBaseTestFixture
     {
-        private const string UpdateUserEndpoint = "/api/user";
-
         [Fact]
         public async Task GivenValidUserUpdateRequest_WhenTheUserIsFoundAndUpdatesEmail_ReturnsUserViewModelWithSuccessfulResponseAndNewToken()
         {

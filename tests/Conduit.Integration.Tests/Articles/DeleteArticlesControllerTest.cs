@@ -10,8 +10,6 @@ namespace Conduit.Integration.Tests.Articles
 
     public class DeleteArticlesControllerTest : ControllerBaseTestFixture
     {
-        private const string ArticlesEndpoint = "/api/articles";
-
         [Fact]
         public async Task GivenValidDeleteArticleRequest_WhenTheArticleExistsAndIsOwnedByTheUser_ReturnsSuccessfulResponse()
         {

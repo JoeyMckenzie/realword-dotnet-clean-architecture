@@ -19,18 +19,15 @@ namespace Conduit.Core.Profiles.Queries.GetProfile
     public class GetProfileQueryQueryHandler : IRequestHandler<GetProfileQuery, ProfileViewModel>
     {
         private readonly ICurrentUserContext _currentUserContext;
-        private readonly UserManager<ConduitUser> _userManager;
         private readonly ConduitDbContext _context;
         private readonly IMapper _mapper;
 
-        public GetProfileQueryQueryHandler(UserManager<ConduitUser> userManager, IMapper mapper, ConduitDbContext context, ICurrentUserContext currentUserContext)
+        public GetProfileQueryQueryHandler(IMapper mapper, ConduitDbContext context, ICurrentUserContext currentUserContext)
         {
             _currentUserContext = currentUserContext;
-            _userManager = userManager;
             _context = context;
             _mapper = mapper;
         }
-
 
         public async Task<ProfileViewModel> Handle(GetProfileQuery request, CancellationToken cancellationToken)
         {
@@ -42,7 +39,7 @@ namespace Conduit.Core.Profiles.Queries.GetProfile
 
             if (existingUser == null)
             {
-                throw new ConduitApiException($"User [{request.Username}] was not found", HttpStatusCode.BadRequest);
+                throw new ConduitApiException($"User [{request.Username}] was not found", HttpStatusCode.NotFound);
             }
 
             // Map the user entity to the view model
@@ -55,10 +52,11 @@ namespace Conduit.Core.Profiles.Queries.GetProfile
             var currentUser = await _currentUserContext.GetCurrentUserContext();
 
             // Get all the user follows for the current user
-            var userFollowForCurrentUser = existingUser.Followers.FirstOrDefault(uf => string.Equals(uf.UserFollowerId, currentUser.Id, StringComparison.OrdinalIgnoreCase));
+            var userFollowForCurrentUser = existingUser.Followers
+                .FirstOrDefault(uf => string.Equals(uf.UserFollowerId, currentUser.Id, StringComparison.OrdinalIgnoreCase));
             profileViewModel.Profile.Following = userFollowForCurrentUser != null;
 
-            throw new System.NotImplementedException();
+            return profileViewModel;
         }
     }
 }

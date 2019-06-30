@@ -1,11 +1,8 @@
 namespace Conduit.Integration.Tests.Users
 {
     using System.Net;
-    using System.Net.Http;
     using System.Threading.Tasks;
-    using Api;
     using Core.Users.Commands.CreateUser;
-    using Domain.Dtos;
     using Domain.Dtos.Users;
     using Domain.ViewModels;
     using Infrastructure;
@@ -14,8 +11,6 @@ namespace Conduit.Integration.Tests.Users
 
     public class RegisterUsersControllerTest : ControllerBaseTestFixture
     {
-        private const string RegisterEndpoint = "/api/users";
-
         [Fact]
         public async Task GivenAUserCreateRequest_WhenThePayloadIsValid_ReturnsUserViewModelWithSuccessfulResponse()
         {

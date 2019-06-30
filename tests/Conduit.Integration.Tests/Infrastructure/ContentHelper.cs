@@ -16,7 +16,7 @@ namespace Conduit.Integration.Tests.Infrastructure
             return new StringContent(JsonConvert.SerializeObject(request), Encoding.UTF8, "application/json");
         }
 
-        public static async Task<StringContent> GetRequestContentWithAuthorization(object request, HttpClient client, LoginUserCommand user = null)
+        public static async Task<StringContent> GetRequestContentWithAuthorization(object request, HttpClient client, object user = null)
         {
             var seedUserLoginRequest = user == null ? IntegrationTestConstants.PrimaryUser : IntegrationTestConstants.SecondaryUser;
             var response = await client.PostAsync("/api/users/login", GetRequestContent(seedUserLoginRequest));
@@ -26,7 +26,7 @@ namespace Conduit.Integration.Tests.Infrastructure
             return GetRequestContent(request);
         }
 
-        public static async Task GetRequestWithAuthorization(HttpClient client, LoginUserCommand user = null)
+        public static async Task GetRequestWithAuthorization(HttpClient client, object user = null)
         {
             var seedUserLoginRequest = user == null ? IntegrationTestConstants.PrimaryUser : IntegrationTestConstants.SecondaryUser;
             var response = await client.PostAsync("/api/users/login", GetRequestContent(seedUserLoginRequest));

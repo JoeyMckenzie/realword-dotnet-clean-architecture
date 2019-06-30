@@ -11,8 +11,6 @@ namespace Conduit.Integration.Tests.Articles
 
     public class UpdateArticlesControllerTest : ControllerBaseTestFixture
     {
-        private const string UpdateEndpoint = "/api/articles";
-
         [Fact]
         public async Task GivenValidUpdateRequest_WhenTheArticleExistsAndIsOwnedByTheUser_ReturnsArticleViewModelWithSuccessfulResponse()
         {
@@ -29,7 +27,7 @@ namespace Conduit.Integration.Tests.Articles
             var requestContent = await ContentHelper.GetRequestContentWithAuthorization(updateArticleCommand, Client);
 
             // Act
-            var response = await Client.PutAsync($"{UpdateEndpoint}/{updateArticleCommand.Slug}", requestContent);
+            var response = await Client.PutAsync($"{ArticlesEndpoint}/{updateArticleCommand.Slug}", requestContent);
             var responseContent = await ContentHelper.GetResponseContent<ArticleViewModel>(response);
 
             // Assert
@@ -56,7 +54,7 @@ namespace Conduit.Integration.Tests.Articles
             var requestContent = await ContentHelper.GetRequestContentWithAuthorization(updateArticleCommand, Client, IntegrationTestConstants.SecondaryUser);
 
             // Act
-            var response = await Client.PutAsync($"{UpdateEndpoint}/{updateArticleCommand.Slug}", requestContent);
+            var response = await Client.PutAsync($"{ArticlesEndpoint}/{updateArticleCommand.Slug}", requestContent);
             var responseContent = await ContentHelper.GetResponseContent<ErrorViewModel>(response);
 
             // Assert
@@ -80,7 +78,7 @@ namespace Conduit.Integration.Tests.Articles
             var requestContent = await ContentHelper.GetRequestContentWithAuthorization(updateArticleCommand, Client, IntegrationTestConstants.SecondaryUser);
 
             // Act
-            var response = await Client.PutAsync($"{UpdateEndpoint}/{updateArticleCommand.Slug}", requestContent);
+            var response = await Client.PutAsync($"{ArticlesEndpoint}/{updateArticleCommand.Slug}", requestContent);
             var responseContent = await ContentHelper.GetResponseContent<ErrorViewModel>(response);
 
             // Assert
@@ -99,7 +97,7 @@ namespace Conduit.Integration.Tests.Articles
             var requestContent = await ContentHelper.GetRequestContentWithAuthorization(updateArticleCommand, Client, IntegrationTestConstants.SecondaryUser);
 
             // Act
-            var response = await Client.PutAsync($"{UpdateEndpoint}/{updateArticleCommand.Slug}", requestContent);
+            var response = await Client.PutAsync($"{ArticlesEndpoint}/{updateArticleCommand.Slug}", requestContent);
             var responseContent = await ContentHelper.GetResponseContent<ErrorViewModel>(response);
 
             // Assert

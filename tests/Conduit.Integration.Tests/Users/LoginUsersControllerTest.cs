@@ -12,8 +12,6 @@ namespace Conduit.Integration.Tests.Users
 
     public class LoginUsersControllerTest : ControllerBaseTestFixture
     {
-        private const string LoginEndpoint = "/api/users/login";
-
         [Fact]
         public async Task GivenAUserLoginRequest_WhenUserExistsAndPasswordIsValid_ReturnsUserViewModelAndSuccessfulResponse()
         {

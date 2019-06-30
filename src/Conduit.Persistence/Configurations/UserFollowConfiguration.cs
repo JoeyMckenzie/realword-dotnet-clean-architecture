@@ -9,11 +9,11 @@ namespace Conduit.Persistence.Configurations
         public void Configure(EntityTypeBuilder<UserFollow> builder)
         {
             builder.HasOne(uf => uf.UserFollower)
-                .WithMany(uf => uf.Followers)
+                .WithMany(uf => uf.Following)
                 .HasForeignKey(uf => uf.UserFollowerId);
 
             builder.HasOne(uf => uf.UserFollowing)
-                .WithMany(uf => uf.Following)
+                .WithMany(uf => uf.Followers)
                 .HasForeignKey(uf => uf.UserFollowingId);
         }
     }
