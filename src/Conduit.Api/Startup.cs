@@ -114,6 +114,14 @@
                 app.UseHsts();
             }
 
+            // Configure cross-origin requests
+            app.UseCors(options =>
+            {
+                options.WithMethods(HttpMethods.Get, HttpMethods.Post, HttpMethods.Put, HttpMethods.Delete, HttpMethods.Options);
+                options.AllowAnyHeader();
+                options.AllowAnyOrigin();
+            });
+
             // Configure health checks
             app.UseHealthChecks("/health", new HealthCheckOptions
             {
