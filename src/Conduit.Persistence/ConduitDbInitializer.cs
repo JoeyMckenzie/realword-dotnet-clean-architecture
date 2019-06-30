@@ -58,8 +58,23 @@ namespace Conduit.Persistence
             testUser2.PasswordHash = new PasswordHasher<ConduitUser>()
                 .HashPassword(testUser2, "#passwordTwo1!");
 
+            var testUser3 = new ConduitUser
+            {
+                Email = "test.user2@gmail.com",
+                NormalizedEmail = "test.user2@gmail.com".ToUpperInvariant(),
+                UserName = "test.user2",
+                NormalizedUserName = "test.user2".ToUpperInvariant(),
+                Bio = "AGAIN, I AM NOT A ROBOT.",
+                Image = "https://joeymckenzie.azurewebsites.net/images/me.jpg",
+                SecurityStamp = "someRandomSecurityStamp"
+            };
+
+            testUser3.PasswordHash = new PasswordHasher<ConduitUser>()
+                .HashPassword(testUser3, "#password3!");
+
             context.Users.Add(testUser1);
             context.Users.Add(testUser2);
+            context.Users.Add(testUser3);
             context.SaveChanges();
 
             userId = testUser1.Id;

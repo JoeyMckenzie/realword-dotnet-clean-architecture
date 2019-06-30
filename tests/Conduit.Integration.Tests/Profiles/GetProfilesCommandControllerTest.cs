@@ -27,7 +27,7 @@ namespace Conduit.Integration.Tests.Profiles
             responseContent.Profile.ShouldNotBeNull();
             responseContent.Profile.ShouldBeOfType<ProfileDto>();
             responseContent.Profile.Username.ShouldBe("joey.mckenzie");
-            responseContent.Profile.Following.ShouldBe(true);
+            responseContent.Profile.Following.ShouldBeTrue();
         }
 
         [Fact]
