@@ -51,11 +51,11 @@ namespace Conduit.Core.Profiles.Commands.FollowUser
             var requestingUserFollower = await _currentUserContext.GetCurrentUserContext();
             if (requestingUserFollower == userToFollow)
             {
-                throw new ConduitApiException($"A user cannot follow themselves", HttpStatusCode.BadRequest);
+                throw new ConduitApiException("A user cannot follow themselves", HttpStatusCode.BadRequest);
             }
 
             var existingFollow = userToFollow.Followers
-                .FirstOrDefault(u => string.Equals(u.UserFollowerId, requestingUserFollower.Id, StringComparison.OrdinalIgnoreCase));
+                .FirstOrDefault(u => u.UserFollower == requestingUserFollower);
 
             if (existingFollow == null)
             {
