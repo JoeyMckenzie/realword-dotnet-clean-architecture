@@ -4,6 +4,7 @@ namespace Conduit.Api.Controllers
     using Core.Articles.Commands.CreateArticle;
     using Core.Articles.Commands.DeleteArticle;
     using Core.Articles.Commands.UpdateArticle;
+    using Core.Articles.Queries.GetArticles;
     using Domain.ViewModels;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Http;
@@ -48,6 +49,21 @@ namespace Conduit.Api.Controllers
         {
             _logger.LogInformation($"Deleting article [{slug}]");
             return Ok(await Mediator.Send(new DeleteArticleCommand(slug)));
+        }
+
+        [HttpGet]
+        [ProducesResponseType(typeof(ArticleViewModelList), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ErrorViewModel), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ErrorViewModel), StatusCodes.Status404NotFound)]
+        public async Task<ArticleViewModelList> GetArticles(
+            [FromQuery] string tag,
+            [FromQuery] string author,
+            [FromQuery] string favorited,
+            [FromQuery] int? limit,
+            [FromQuery] int? offset)
+        {
+            _logger.LogInformation($"Retrieving all articles for query [tag: {tag}] [author: {author}] [favorited: {favorited}]");
+            return await Mediator.Send(new GetArticlesQuery(tag, author, favorited, limit, offset));
         }
     }
 }

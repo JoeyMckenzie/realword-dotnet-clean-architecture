@@ -6,6 +6,6 @@ namespace Conduit.Domain.ViewModels
 
     public class ArticleViewModelList
     {
-        public ICollection<ArticleDto> Articles { get; set; }
+        public IEnumerable<ArticleDto> Articles { get; set; }
     }
 }

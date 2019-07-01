@@ -19,8 +19,4 @@
     <ProjectReference Include="..\Conduit.Shared\Conduit.Shared.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Articles\Queries" />
-  </ItemGroup>
-
 </Project>
