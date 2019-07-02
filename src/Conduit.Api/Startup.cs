@@ -1,8 +1,6 @@
 ﻿namespace Conduit.Api
 {
-    using System.Linq;
     using System.Reflection;
-    using System.Threading.Tasks;
     using AutoMapper;
     using Core;
     using Core.Infrastructure;
@@ -27,8 +25,6 @@
     using Microsoft.Extensions.Diagnostics.HealthChecks;
     using Microsoft.Extensions.Logging;
     using Middleware;
-    using Newtonsoft.Json;
-    using Newtonsoft.Json.Linq;
     using Persistence;
     using Shared;
     using Shared.Constants;

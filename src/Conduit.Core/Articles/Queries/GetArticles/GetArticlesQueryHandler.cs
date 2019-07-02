@@ -40,14 +40,24 @@ namespace Conduit.Core.Articles.Queries.GetArticles
                 .Include(a => a.Favorites)
                 .AsQueryable();
             ConduitUser author = null;
+            var noSearchResults = new ArticleViewModelList
+            {
+                Articles = new List<ArticleDto>()
+            };
 
             // Filter on author
             if (!string.IsNullOrWhiteSpace(request.Author))
             {
                 author = await _userManager.FindByNameAsync(request.Author);
+
+                // If no author is found during the search, return an empty list
                 if (author != null)
                 {
                     articles = articles.Where(a => a.Author == author);
+                }
+                else
+                {
+                    return noSearchResults;
                 }
             }
 
@@ -56,22 +66,37 @@ namespace Conduit.Core.Articles.Queries.GetArticles
             {
                 var tag = await _context.Tags
                     .FirstOrDefaultAsync(t => string.Equals(t.Description, request.Tag, StringComparison.OrdinalIgnoreCase), cancellationToken);
+
+                // If no tag is found for the requesting tag, return an empty list
                 if (tag != null)
                 {
                     articles = articles.Where(a => a.ArticleTags.Select(at => at.Tag).Contains(tag));
+                }
+                else
+                {
+                    return noSearchResults;
                 }
             }
 
             // Filter on favorited
             if (!string.IsNullOrWhiteSpace(request.Favorited))
             {
-                articles = articles.Where(a => a.Favorites.Select(f => f.User).Contains(author));
+                // If not favorited articles on found by the user, return an empty list
+                if (articles.Any(a => a.Favorites.Select(f => f.User).Contains(author)))
+                {
+                    articles = articles.Where(a => a.Favorites.Select(f => f.User).Contains(author));
+                }
+                else
+                {
+                    return noSearchResults;
+                }
             }
 
             // Paginate and map the results
             var results = await articles
                 .Skip(request.Offset)
                 .Take(request.Limit)
+                .OrderByDescending(a => a.CreatedAt)
                 .ToListAsync(cancellationToken);
 
             var articlesViewModelList = new ArticleViewModelList
