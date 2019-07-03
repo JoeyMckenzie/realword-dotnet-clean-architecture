@@ -9,6 +9,8 @@ namespace Conduit.Core.Articles.Queries.GetArticles
     using Domain.Dtos.Articles;
     using Domain.Entities;
     using Domain.ViewModels;
+    using Extensions;
+    using Infrastructure;
     using MediatR;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.EntityFrameworkCore;
@@ -16,6 +18,7 @@ namespace Conduit.Core.Articles.Queries.GetArticles
 
     public class GetArticlesQueryHandler : IRequestHandler<GetArticlesQuery, ArticleViewModelList>
     {
+        private readonly ICurrentUserContext _currentUserContext;
         private readonly UserManager<ConduitUser> _userManager;
         private readonly ConduitDbContext _context;
         private readonly IMapper _mapper;
@@ -23,8 +26,10 @@ namespace Conduit.Core.Articles.Queries.GetArticles
         public GetArticlesQueryHandler(
             UserManager<ConduitUser> userManager,
             ConduitDbContext context,
-            IMapper mapper)
+            IMapper mapper,
+            ICurrentUserContext currentUserContext)
         {
+            _currentUserContext = currentUserContext;
             _userManager = userManager;
             _context = context;
             _mapper = mapper;
@@ -35,10 +40,14 @@ namespace Conduit.Core.Articles.Queries.GetArticles
             // Retrieve all articles from the database and include the corresponding
             var articles = _context.Articles
                 .Include(a => a.Author)
+                    .ThenInclude(au => au.Followers)
                 .Include(a => a.ArticleTags)
                     .ThenInclude(at => at.Tag)
                 .Include(a => a.Favorites)
+                    .ThenInclude(f => f.User)
                 .AsQueryable();
+
+            // Instantiate the user and empty results list
             ConduitUser author = null;
             var noSearchResults = new ArticleViewModelList
             {
@@ -103,6 +112,21 @@ namespace Conduit.Core.Articles.Queries.GetArticles
             {
                 Articles = _mapper.Map<IEnumerable<ArticleDto>>(results)
             };
+
+            // Flip the following status of each article based on the current user on the request
+            var currentUser = await _currentUserContext.GetCurrentUserContext();
+            foreach (var article in articlesViewModelList.Articles)
+            {
+                // Retrieve the corresponding article
+                var mappedArticleEntity = results.FirstOrDefault(a => string.Equals(a.Title, article.Title, StringComparison.OrdinalIgnoreCase));
+
+                // Set the following and favorited properties
+                if (mappedArticleEntity != null)
+                {
+                    article.Author.Following = mappedArticleEntity.IsFollowingAuthor(currentUser);
+                    article.Favorited = mappedArticleEntity.HasFavorited(currentUser);
+                }
+            }
 
             return articlesViewModelList;
         }

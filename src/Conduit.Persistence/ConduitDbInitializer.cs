@@ -95,7 +95,9 @@ namespace Conduit.Persistence
                 Description = "Ever wonder how?",
                 Body = "Very carefully.",
                 Slug = "how-to-train-your-dragon",
-                AuthorId = userId
+                AuthorId = userId,
+                CreatedAt = DateTime.Now.Add(TimeSpan.FromMinutes(5)),
+                UpdatedAt = DateTime.Now.Add(TimeSpan.FromMinutes(5))
             };
 
             var testArticleByAnotherUser = new Article
@@ -104,7 +106,9 @@ namespace Conduit.Persistence
                 Description = "It really is",
                 Body = "WE MUST DRINK IT ALL.",
                 Slug = "why-beer-is-gods-gift-to-the-world",
-                AuthorId = context.Users.FirstOrDefault(u => string.Equals(u.UserName, "test.user", StringComparison.OrdinalIgnoreCase))?.Id
+                AuthorId = context.Users.FirstOrDefault(u => string.Equals(u.UserName, "test.user", StringComparison.OrdinalIgnoreCase))?.Id,
+                CreatedAt = DateTime.Now,
+                UpdatedAt = DateTime.Now
             };
 
             context.Articles.AddRange(testArticle, testArticleByAnotherUser);

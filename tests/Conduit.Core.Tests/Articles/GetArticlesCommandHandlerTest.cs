@@ -20,7 +20,7 @@ namespace Conduit.Core.Tests.Articles
             var getArticlesCommand = new GetArticlesQuery("dragons", "joey.mckenzie", null, null, null);
 
             // Act
-            var command = new GetArticlesQueryHandler(UserManager, Context, Mapper);
+            var command = new GetArticlesQueryHandler(UserManager, Context, Mapper, CurrentUserContext);
             var response = await command.Handle(getArticlesCommand, CancellationToken.None);
 
             // Assert
@@ -38,7 +38,7 @@ namespace Conduit.Core.Tests.Articles
             var getArticlesCommand = new GetArticlesQuery(null, "joey.mckenzie", "thisUserDoesNotExist", null, null);
 
             // Act
-            var command = new GetArticlesQueryHandler(UserManager, Context, Mapper);
+            var command = new GetArticlesQueryHandler(UserManager, Context, Mapper, CurrentUserContext);
             var response = await command.Handle(getArticlesCommand, CancellationToken.None);
 
             // Assert
@@ -56,7 +56,7 @@ namespace Conduit.Core.Tests.Articles
             var getArticlesCommand = new GetArticlesQuery(null, null, null, null, null);
 
             // Act
-            var command = new GetArticlesQueryHandler(UserManager, Context, Mapper);
+            var command = new GetArticlesQueryHandler(UserManager, Context, Mapper, CurrentUserContext);
             var response = await command.Handle(getArticlesCommand, CancellationToken.None);
 
             // Assert
@@ -75,7 +75,7 @@ namespace Conduit.Core.Tests.Articles
             var getArticlesCommand = new GetArticlesQuery(null, null, null, 1, null);
 
             // Act
-            var command = new GetArticlesQueryHandler(UserManager, Context, Mapper);
+            var command = new GetArticlesQueryHandler(UserManager, Context, Mapper, CurrentUserContext);
             var response = await command.Handle(getArticlesCommand, CancellationToken.None);
 
             // Assert
@@ -95,7 +95,7 @@ namespace Conduit.Core.Tests.Articles
             var getArticlesCommand = new GetArticlesQuery(null, null, null, null, 1);
 
             // Act
-            var command = new GetArticlesQueryHandler(UserManager, Context, Mapper);
+            var command = new GetArticlesQueryHandler(UserManager, Context, Mapper, CurrentUserContext);
             var response = await command.Handle(getArticlesCommand, CancellationToken.None);
 
             // Assert

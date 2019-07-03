@@ -15,7 +15,7 @@ namespace Conduit.Integration.Tests.Articles
         public async Task GivenValidRequest_WhenTheRequestDoesNotContainAnyQueryParams_ReturnsArticlesViewModelWithAllArticles()
         {
             // Arrange
-            await ContentHelper.GetRequestWithAuthorization(Client);
+            await ContentHelper.GetRequestWithAuthorization(Client, IntegrationTestConstants.SecondaryUser);
 
             // Act
             var response = await Client.GetAsync($"{ArticlesEndpoint}");
@@ -30,6 +30,10 @@ namespace Conduit.Integration.Tests.Articles
             responseContent.Articles.ShouldNotBeEmpty();
             responseContent.Articles.ShouldContain(a => a.Author.Username == "joey.mckenzie");
             responseContent.Articles.ShouldContain(a => a.Author.Username == "test.user");
+            responseContent.Articles.FirstOrDefault(a => a.Author.Username == "joey.mckenzie")?.Favorited.ShouldBeTrue();
+            responseContent.Articles.FirstOrDefault(a => a.Author.Username == "joey.mckenzie")?.Author?.Following.ShouldBeTrue();
+            responseContent.Articles.FirstOrDefault(a => a.Author.Username == "test.user")?.Favorited.ShouldBeFalse();
+            responseContent.Articles.FirstOrDefault(a => a.Author.Username == "tes.user")?.Author?.Following.ShouldBeFalse();
         }
 
         [Fact]
