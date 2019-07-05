@@ -179,10 +179,21 @@ namespace Conduit.Persistence
             {
                 Body = "Thank you so much!",
                 UserId = userId,
-                ArticleId = articleId
+                ArticleId = articleId,
+                CreatedAt = DateTime.Now,
+                UpdatedAt = DateTime.Now
             };
 
-            context.Comments.Add(comment);
+            var comment2 = new Comment
+            {
+                Body = "This article is terrible!",
+                UserId = context.Users.FirstOrDefault(u => u.UserName == "test.user2")?.Id,
+                ArticleId = articleId,
+                CreatedAt = DateTime.Now.Add(TimeSpan.FromMinutes(5)),
+                UpdatedAt = DateTime.Now.Add(TimeSpan.FromMinutes(5))
+            };
+
+            context.Comments.AddRange(comment, comment2);
             context.SaveChanges();
         }
 

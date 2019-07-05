@@ -4,6 +4,7 @@ namespace Conduit.Persistence.Infrastructure
     using System.Threading;
     using System.Threading.Tasks;
     using Domain.Entities;
+    using Microsoft.EntityFrameworkCore;
     using Shared.Extensions;
 
     public static class DbContextExtensions
@@ -34,6 +35,18 @@ namespace Conduit.Persistence.Infrastructure
         {
             await AddActivityAsync(dbContext, activityType, transactionType, transactionId);
             await dbContext.SaveChangesAsync(cancellationToken);
+        }
+
+        public static async Task<Article> FirstArticleOrDefaultWithRelatedEntities(this ConduitDbContext context, string slug, CancellationToken cancellationToken)
+        {
+            return await context.Articles
+                .Include(a => a.Author)
+                    .ThenInclude(au => au.Followers)
+                .Include(a => a.ArticleTags)
+                    .ThenInclude(at => at.Tag)
+                .Include(a => a.Favorites)
+                    .ThenInclude(f => f.User)
+                .FirstOrDefaultAsync(a => string.Equals(a.Slug, slug, StringComparison.OrdinalIgnoreCase), cancellationToken);
         }
     }
 }

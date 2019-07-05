@@ -1,9 +1,11 @@
 namespace Conduit.Core
 {
     using System.Reflection;
+    using Articles.Commands.AddComment;
     using Articles.Commands.CreateArticle;
     using Articles.Commands.DeleteArticle;
     using Articles.Queries.GetArticles;
+    using Articles.Queries.GetCommentsFromArticle;
     using Articles.Queries.GetFeed;
     using Profiles.Commands.FollowUser;
     using Profiles.Commands.UnfollowUser;
@@ -31,7 +33,9 @@ namespace Conduit.Core
                 typeof(UnfollowUserCommandHandler).Assembly,
                 typeof(GetArticlesQueryHandler).Assembly,
                 typeof(GetFeedQueryHandler).Assembly,
-                typeof(GetArticlesQueryHandler).Assembly
+                typeof(GetArticlesQueryHandler).Assembly,
+                typeof(AddCommentCommand).Assembly,
+                typeof(ArticleCommentsQueryHandler).Assembly
             };
         }
     }

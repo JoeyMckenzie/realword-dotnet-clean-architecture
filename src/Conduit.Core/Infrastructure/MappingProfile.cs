@@ -4,6 +4,7 @@ namespace Conduit.Core.Infrastructure
     using AutoMapper;
     using Domain.Dtos;
     using Domain.Dtos.Articles;
+    using Domain.Dtos.Comments;
     using Domain.Dtos.Users;
     using Domain.Entities;
     using Domain.ViewModels;
@@ -32,11 +33,15 @@ namespace Conduit.Core.Infrastructure
             // Tag mappings
             CreateMap<Tag, TagDto>();
 
-            // Profile Mappings
+            // Profile mappings
             CreateMap<ConduitUser, ProfileDto>()
                 .ForMember(u => u.Username, m => m.MapFrom(u => u.UserName))
                 .ForMember(u => u.Bio, m => m.MapFrom(u => u.Bio))
                 .ForMember(u => u.Image, m => m.MapFrom(u => u.Image));
+
+            // Comment mappings
+            CreateMap<Comment, CommentDto>()
+                .ForMember(c => c.Author, m => m.MapFrom(u => u.User));
         }
     }
 }

@@ -1,12 +1,15 @@
 namespace Conduit.Api.Controllers
 {
     using System.Threading.Tasks;
+    using Core.Articles.Commands.AddComment;
     using Core.Articles.Commands.CreateArticle;
     using Core.Articles.Commands.DeleteArticle;
     using Core.Articles.Commands.UpdateArticle;
     using Core.Articles.Queries.GetArticle;
     using Core.Articles.Queries.GetArticles;
+    using Core.Articles.Queries.GetCommentsFromArticle;
     using Core.Articles.Queries.GetFeed;
+    using Domain.Dtos.Comments;
     using Domain.ViewModels;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Http;
@@ -80,8 +83,27 @@ namespace Conduit.Api.Controllers
         [ProducesResponseType(typeof(ArticleViewModel), StatusCodes.Status404NotFound)]
         public async Task<ArticleViewModel> GetArticleFromSlug(string slug)
         {
-            _logger.LogInformation($"Retrieving article {slug}");
+            _logger.LogInformation($"Retrieving article [{slug}]");
             return await Mediator.Send(new GetArticleQuery(slug));
+        }
+
+        [HttpPost("{slug}/comments")]
+        [ProducesResponseType(typeof(CommentViewModel), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(CommentViewModel), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(CommentViewModel), StatusCodes.Status415UnsupportedMediaType)]
+        public async Task<CommentViewModel> AddCommentToArticle([FromBody] AddCommentDto command, string slug)
+        {
+            _logger.LogInformation($"Adding comment to article [{slug}]");
+            return await Mediator.Send(new AddCommentCommand(slug, command));
+        }
+
+        [HttpGet("{slug}/comments")]
+        [ProducesResponseType(typeof(CommentViewModel), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(CommentViewModel), StatusCodes.Status404NotFound)]
+        public async Task<CommentViewModelList> GetCommentsFromArticle(string slug)
+        {
+            _logger.LogInformation($"Retrieve all comments from article [{slug}]");
+            return await Mediator.Send(new ArticleCommentsQuery(slug));
         }
     }
 }

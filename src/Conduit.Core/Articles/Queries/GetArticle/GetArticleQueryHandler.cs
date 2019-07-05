@@ -13,6 +13,7 @@ namespace Conduit.Core.Articles.Queries.GetArticle
     using MediatR;
     using Microsoft.EntityFrameworkCore;
     using Persistence;
+    using Persistence.Infrastructure;
 
     public class GetArticleQueryHandler : IRequestHandler<GetArticleQuery, ArticleViewModel>
     {
@@ -27,14 +28,7 @@ namespace Conduit.Core.Articles.Queries.GetArticle
 
         public async Task<ArticleViewModel> Handle(GetArticleQuery request, CancellationToken cancellationToken)
         {
-            var articleFromSlug = await _context.Articles
-                .Include(a => a.Author)
-                    .ThenInclude(au => au.Followers)
-                .Include(a => a.ArticleTags)
-                    .ThenInclude(at => at.Tag)
-                .Include(a => a.Favorites)
-                    .ThenInclude(f => f.User)
-                .FirstOrDefaultAsync(a => string.Equals(a.Slug, request.Slug, StringComparison.OrdinalIgnoreCase), cancellationToken);
+            var articleFromSlug = await _context.FirstArticleOrDefaultWithRelatedEntities(request.Slug, cancellationToken);
 
             if (articleFromSlug == null)
             {

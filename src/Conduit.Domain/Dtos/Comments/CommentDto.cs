@@ -1,4 +1,4 @@
-namespace Conduit.Domain.Dtos
+namespace Conduit.Domain.Dtos.Comments
 {
     using System;
 
