@@ -1,6 +1,5 @@
 namespace Conduit.Core.Articles.Queries.GetFeed
 {
-    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading;
@@ -12,7 +11,6 @@ namespace Conduit.Core.Articles.Queries.GetFeed
     using Infrastructure;
     using MediatR;
     using Microsoft.EntityFrameworkCore;
-    using Microsoft.EntityFrameworkCore.Internal;
     using Persistence;
 
     public class GetFeedQueryHandler : IRequestHandler<GetFeedQuery, ArticleViewModelList>

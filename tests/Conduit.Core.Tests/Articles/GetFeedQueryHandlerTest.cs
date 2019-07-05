@@ -50,5 +50,24 @@ namespace Conduit.Core.Tests.Articles
             response.Articles.ShouldBeOfType<List<ArticleDto>>();
             response.Articles.ShouldBeEmpty();
         }
+
+        [Fact]
+        public async Task GivenValidRequest_WhenTheRequestHasLimitQueryParam_ReturnsLimitedArticleViewModelList()
+        {
+            // Arrange
+            var getFeedQuery = new GetFeedQuery(1, null);
+
+            // Act
+            var handler = new GetFeedQueryHandler(CurrentUserContext, Context, Mapper);
+            var response = await handler.Handle(getFeedQuery, CancellationToken.None);
+
+            // Assert
+            response.ShouldNotBeNull();
+            response.ShouldBeOfType<ArticleViewModelList>();
+            response.Articles.ShouldNotBeNull();
+            response.Articles.ShouldBeOfType<List<ArticleDto>>();
+            response.Articles.ShouldNotBeEmpty();
+            response.Articles.Single().Author.Username.ShouldBe("joey.mckenzie");
+        }
     }
 }
