@@ -9,7 +9,6 @@ namespace Conduit.Api.Controllers
     using Core.Articles.Queries.GetArticles;
     using Core.Articles.Queries.GetCommentsFromArticle;
     using Core.Articles.Queries.GetFeed;
-    using Domain.Dtos.Comments;
     using Domain.ViewModels;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Http;
@@ -91,10 +90,11 @@ namespace Conduit.Api.Controllers
         [ProducesResponseType(typeof(CommentViewModel), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(CommentViewModel), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(CommentViewModel), StatusCodes.Status415UnsupportedMediaType)]
-        public async Task<CommentViewModel> AddCommentToArticle([FromBody] AddCommentDto command, string slug)
+        public async Task<CommentViewModel> AddCommentToArticle([FromBody] AddCommentCommand command, string slug)
         {
             _logger.LogInformation($"Adding comment to article [{slug}]");
-            return await Mediator.Send(new AddCommentCommand(slug, command));
+            command.Slug = slug;
+            return await Mediator.Send(command);
         }
 
         [HttpGet("{slug}/comments")]

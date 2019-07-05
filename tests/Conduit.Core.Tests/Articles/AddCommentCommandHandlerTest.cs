@@ -23,7 +23,11 @@ namespace Conduit.Core.Tests.Articles
             {
                 Body = "This article sucks!"
             };
-            var addCommentCommand = new AddCommentCommand("how-to-train-your-dragon", commentDto);
+            var addCommentCommand = new AddCommentCommand
+            {
+                Slug = "how-to-train-your-dragon",
+                Comment = commentDto
+            };
             var articleComments = Context.Articles
                 .Include(a => a.Comments)
                 .FirstOrDefault(a => a.Slug == "how-to-train-your-dragon")?
@@ -52,7 +56,11 @@ namespace Conduit.Core.Tests.Articles
             {
                 Body = "This article sucks!"
             };
-            var addCommentCommand = new AddCommentCommand("this-article-sucks", commentDto);
+            var addCommentCommand = new AddCommentCommand
+            {
+                Slug = "how-to-not-train-your-dragon",
+                Comment = commentDto
+            };
 
             // Act
             var handler = new AddCommentCommandHandler(CurrentUserContext, Context, Mapper, MachineDateTime);

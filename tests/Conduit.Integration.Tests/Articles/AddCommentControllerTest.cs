@@ -2,6 +2,7 @@ namespace Conduit.Integration.Tests.Articles
 {
     using System.Net;
     using System.Threading.Tasks;
+    using Core.Articles.Commands.AddComment;
     using Domain.Dtos;
     using Domain.Dtos.Comments;
     using Domain.ViewModels;
@@ -15,9 +16,12 @@ namespace Conduit.Integration.Tests.Articles
         public async Task GivenValidRequest_WhenTheArticleExists_ReturnsCommentViewModel()
         {
             // Arrange
-            var comment = new AddCommentDto
+            var comment = new AddCommentCommand
             {
-                Body = "You stink!"
+                Comment = new AddCommentDto
+                {
+                    Body = "You stink!"
+                }
             };
             var requestContent = await ContentHelper.GetRequestContentWithAuthorization(comment, Client, IntegrationTestConstants.SecondaryUser);
 
@@ -31,7 +35,7 @@ namespace Conduit.Integration.Tests.Articles
             responseContent.ShouldBeOfType<CommentViewModel>();
             responseContent.Comment.ShouldNotBeNull();
             responseContent.Comment.ShouldBeOfType<CommentDto>();
-            responseContent.Comment.Body.ShouldNotBeEmpty(comment.Body);
+            responseContent.Comment.Body.ShouldNotBeEmpty(comment.Comment.Body);
             responseContent.Comment.Author.Username.ShouldBe("test.user");
         }
 
@@ -39,9 +43,12 @@ namespace Conduit.Integration.Tests.Articles
         public async Task GivenValidRequest_WhenTheArticleDoesNotExist_ReturnsErrorViewModelWithNotFound()
         {
             // Arrange
-            var comment = new AddCommentDto
+            var comment = new AddCommentCommand
             {
-                Body = "You stink!"
+                Comment = new AddCommentDto
+                {
+                    Body = "You stink!"
+                }
             };
             var requestContent = await ContentHelper.GetRequestContentWithAuthorization(comment, Client, IntegrationTestConstants.SecondaryUser);
 
@@ -61,7 +68,10 @@ namespace Conduit.Integration.Tests.Articles
         public async Task GivenInvalidRequest_WhenTheArticleDoesNotContainABody_ReturnsErrorViewModelWithUnsupportedMediaType()
         {
             // Arrange
-            var comment = new AddCommentDto();
+            var comment = new AddCommentCommand
+            {
+                Comment = new AddCommentDto()
+            };
             var requestContent = await ContentHelper.GetRequestContentWithAuthorization(comment, Client, IntegrationTestConstants.SecondaryUser);
 
             // Act

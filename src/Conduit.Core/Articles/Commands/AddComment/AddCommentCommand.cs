@@ -6,14 +6,8 @@ namespace Conduit.Core.Articles.Commands.AddComment
 
     public class AddCommentCommand : IRequest<CommentViewModel>
     {
-        public AddCommentCommand(string slug, AddCommentDto comment)
-        {
-            Slug = slug;
-            Comment = comment;
-        }
+        public string Slug { get; set; }
 
-        public string Slug { get; }
-
-        public AddCommentDto Comment { get; }
+        public AddCommentDto Comment { get; set; }
     }
 }
