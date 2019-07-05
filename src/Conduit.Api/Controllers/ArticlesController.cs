@@ -75,6 +75,7 @@ namespace Conduit.Api.Controllers
         }
 
         [HttpGet("{slug}")]
+        [AllowAnonymous]
         [ProducesResponseType(typeof(ArticleViewModel), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ArticleViewModel), StatusCodes.Status404NotFound)]
         public async Task<ArticleViewModel> GetArticleFromSlug(string slug)

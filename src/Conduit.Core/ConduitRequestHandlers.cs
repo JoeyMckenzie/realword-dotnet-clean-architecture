@@ -30,7 +30,8 @@ namespace Conduit.Core
                 typeof(FollowUserCommandHandler).Assembly,
                 typeof(UnfollowUserCommandHandler).Assembly,
                 typeof(GetArticlesQueryHandler).Assembly,
-                typeof(GetFeedQueryHandler).Assembly
+                typeof(GetFeedQueryHandler).Assembly,
+                typeof(GetArticlesQueryHandler).Assembly
             };
         }
     }
