@@ -113,9 +113,9 @@ namespace Conduit.Core.Articles.Queries.GetArticles
                 Articles = _mapper.Map<IEnumerable<ArticleDto>>(results)
             };
 
-            // Flip the following status of each article based on the current user on the request
+            // Set the following and favorited status of each article
             var currentUser = await _currentUserContext.GetCurrentUserContext();
-            articlesViewModelList.SetFollowingAndFavorited(results, currentUser);
+            articlesViewModelList.SetViewModelProperties(results, currentUser, articles.SelectMany(a => a.ArticleTags).ToList());
 
             return articlesViewModelList;
         }

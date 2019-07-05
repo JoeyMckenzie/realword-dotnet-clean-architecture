@@ -14,11 +14,13 @@ namespace Conduit.Core.Tests.Extensions
     public class ArticleExtensionsTest : TestFixture
     {
         private readonly IList<Article> _articles;
+        private readonly IList<ArticleTag> _articleTags;
         private readonly ArticleViewModelList _articleViewModelList;
 
         public ArticleExtensionsTest()
         {
             _articles = Context.Articles.ToList();
+            _articleTags = _articles.SelectMany(a => a.ArticleTags).ToList();
             _articleViewModelList = new ArticleViewModelList
             {
                 Articles = Mapper.Map<IEnumerable<ArticleDto>>(_articles)
@@ -30,7 +32,7 @@ namespace Conduit.Core.Tests.Extensions
         }
 
         [Fact]
-        public async Task SetFollowingAndFavorited_WhenFollowerExists_ReturnsWithFollowingSetToTrue()
+        public async Task SetViewModelProperties_WhenFollowerExists_ReturnsWithFollowingSetToTrue()
         {
             // Arrange
             var authorToFollow = _articleViewModelList.Articles.FirstOrDefault(a => a.Author.Username == "joey.mckenzie");
@@ -39,26 +41,12 @@ namespace Conduit.Core.Tests.Extensions
             var user = await CurrentUserContext.GetCurrentUserContext();
 
             // Act
-            _articleViewModelList.SetFollowingAndFavorited(_articles, user);
+            _articleViewModelList.SetViewModelProperties(_articles, user, _articleTags);
 
             // Assert
             authorToFollow.Author.Following.ShouldBeTrue();
-        }
-
-        [Fact]
-        public async Task SetFollowingAndFavorited_WhenArticleIsFavoried_ReturnsWithFavoritedSetToTrue()
-        {
-            // Arrange
-            var authorToFollow = _articleViewModelList.Articles.FirstOrDefault(a => a.Author.Username == "joey.mckenzie");
-            authorToFollow.ShouldNotBeNull();
-            authorToFollow.Favorited.ShouldBeFalse();
-            var user = await CurrentUserContext.GetCurrentUserContext();
-
-            // Act
-            _articleViewModelList.SetFollowingAndFavorited(_articles, user);
-
-            // Assert
             authorToFollow.Favorited.ShouldBeTrue();
+            authorToFollow.TagList.ShouldNotBeEmpty();
         }
     }
 }

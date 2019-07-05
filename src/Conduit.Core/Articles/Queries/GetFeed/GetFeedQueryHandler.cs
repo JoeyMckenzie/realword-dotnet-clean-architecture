@@ -63,7 +63,7 @@ namespace Conduit.Core.Articles.Queries.GetFeed
             {
                 Articles = _mapper.Map<IEnumerable<ArticleDto>>(feedArticles)
             };
-            articleViewModelList.SetFollowingAndFavorited(feedArticles, currentUser);
+            articleViewModelList.SetViewModelProperties(feedArticles, currentUser, feedArticles.SelectMany(a => a.ArticleTags).ToList());
 
             return articleViewModelList;
         }

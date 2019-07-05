@@ -32,8 +32,10 @@ namespace Conduit.Integration.Tests.Articles
             responseContent.Articles.ShouldContain(a => a.Author.Username == "test.user");
             responseContent.Articles.FirstOrDefault(a => a.Author.Username == "joey.mckenzie")?.Favorited.ShouldBeTrue();
             responseContent.Articles.FirstOrDefault(a => a.Author.Username == "joey.mckenzie")?.Author?.Following.ShouldBeTrue();
+            responseContent.Articles.FirstOrDefault(a => a.Author.Username == "joey.mckenzie")?.TagList.ShouldNotBeEmpty();
             responseContent.Articles.FirstOrDefault(a => a.Author.Username == "test.user")?.Favorited.ShouldBeFalse();
             responseContent.Articles.FirstOrDefault(a => a.Author.Username == "tes.user")?.Author?.Following.ShouldBeFalse();
+            responseContent.Articles.FirstOrDefault(a => a.Author.Username == "tes.user")?.TagList.ShouldNotBeEmpty();
         }
 
         [Fact]

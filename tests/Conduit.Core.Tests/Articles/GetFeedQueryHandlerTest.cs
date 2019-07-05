@@ -31,6 +31,7 @@ namespace Conduit.Core.Tests.Articles
             response.Articles.ShouldContain(a => a.Author.Username == "joey.mckenzie");
             response.Articles.FirstOrDefault(a => a.Author.Username == "joey.mckenzie")?.Author.Following.ShouldBeTrue();
             response.Articles.FirstOrDefault(a => a.Author.Username == "joey.mckenzie")?.Favorited.ShouldBeTrue();
+            response.Articles.FirstOrDefault(a => a.Author.Username == "joey.mckenzie")?.TagList.ShouldNotBeEmpty();
         }
 
         [Fact]

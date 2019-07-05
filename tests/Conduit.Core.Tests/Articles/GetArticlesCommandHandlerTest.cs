@@ -31,6 +31,7 @@ namespace Conduit.Core.Tests.Articles
             response.Articles.ShouldNotBeEmpty();
             response.Articles.FirstOrDefault()?.Author.Following.ShouldBeTrue();
             response.Articles.FirstOrDefault()?.Favorited.ShouldBeTrue();
+            response.Articles.FirstOrDefault()?.TagList.ShouldContain("dragons");
         }
 
         [Fact]
@@ -51,6 +52,7 @@ namespace Conduit.Core.Tests.Articles
             response.Articles.ShouldBeEmpty();
             response.Articles.FirstOrDefault()?.Author.Following.ShouldBeTrue();
             response.Articles.FirstOrDefault()?.Favorited.ShouldBeTrue();
+            response.Articles.FirstOrDefault()?.TagList.ShouldNotBeEmpty();
         }
 
         [Fact]
@@ -72,8 +74,10 @@ namespace Conduit.Core.Tests.Articles
             response.ArticlesCount.ShouldBe(2);
             response.Articles.FirstOrDefault(a => a.Author.Username == "joey.mckenzie")?.Author.Following.ShouldBeTrue();
             response.Articles.FirstOrDefault(a => a.Author.Username == "joey.mckenzie")?.Favorited.ShouldBeTrue();
+            response.Articles.FirstOrDefault(a => a.Author.Username == "joey.mckenzie")?.TagList.ShouldNotBeEmpty();
             response.Articles.FirstOrDefault(a => a.Author.Username == "test.user")?.Author.Following.ShouldBeFalse();
             response.Articles.FirstOrDefault(a => a.Author.Username == "test.user")?.Favorited.ShouldBeFalse();
+            response.Articles.FirstOrDefault(a => a.Author.Username == "test.user")?.TagList.ShouldNotBeEmpty();
         }
 
         [Fact]
@@ -96,6 +100,7 @@ namespace Conduit.Core.Tests.Articles
             response.Articles.ShouldContain(a => a.Author.Username == "joey.mckenzie");
             response.Articles.FirstOrDefault(a => a.Author.Username == "joey.mckenzie")?.Author.Following.ShouldBeTrue();
             response.Articles.FirstOrDefault(a => a.Author.Username == "joey.mckenzie")?.Favorited.ShouldBeTrue();
+            response.Articles.FirstOrDefault(a => a.Author.Username == "joey.mckenzie")?.TagList.ShouldNotBeEmpty();
         }
 
         [Fact]
@@ -118,6 +123,7 @@ namespace Conduit.Core.Tests.Articles
             response.Articles.ShouldContain(a => a.Author.Username == "test.user");
             response.Articles.FirstOrDefault(a => a.Author.Username == "test.user")?.Author.Following.ShouldBeFalse();
             response.Articles.FirstOrDefault(a => a.Author.Username == "test.user")?.Favorited.ShouldBeFalse();
+            response.Articles.FirstOrDefault(a => a.Author.Username == "test.user")?.TagList.ShouldNotBeEmpty();
         }
     }
 }

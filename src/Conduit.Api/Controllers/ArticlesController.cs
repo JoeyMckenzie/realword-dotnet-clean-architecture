@@ -4,6 +4,7 @@ namespace Conduit.Api.Controllers
     using Core.Articles.Commands.CreateArticle;
     using Core.Articles.Commands.DeleteArticle;
     using Core.Articles.Commands.UpdateArticle;
+    using Core.Articles.Queries.GetArticle;
     using Core.Articles.Queries.GetArticles;
     using Core.Articles.Queries.GetFeed;
     using Domain.ViewModels;
@@ -71,6 +72,15 @@ namespace Conduit.Api.Controllers
         {
             _logger.LogInformation("Retrieving feed articles");
             return await Mediator.Send(new GetFeedQuery(limit, offset));
+        }
+
+        [HttpGet("{slug}")]
+        [ProducesResponseType(typeof(ArticleViewModel), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ArticleViewModel), StatusCodes.Status404NotFound)]
+        public async Task<ArticleViewModel> GetArticleFromSlug(string slug)
+        {
+            _logger.LogInformation($"Retrieving article {slug}");
+            return await Mediator.Send(new GetArticleQuery(slug));
         }
     }
 }
