@@ -115,18 +115,7 @@ namespace Conduit.Core.Articles.Queries.GetArticles
 
             // Flip the following status of each article based on the current user on the request
             var currentUser = await _currentUserContext.GetCurrentUserContext();
-            foreach (var article in articlesViewModelList.Articles)
-            {
-                // Retrieve the corresponding article
-                var mappedArticleEntity = results.FirstOrDefault(a => string.Equals(a.Title, article.Title, StringComparison.OrdinalIgnoreCase));
-
-                // Set the following and favorited properties
-                if (mappedArticleEntity != null)
-                {
-                    article.Author.Following = mappedArticleEntity.IsFollowingAuthor(currentUser);
-                    article.Favorited = mappedArticleEntity.HasFavorited(currentUser);
-                }
-            }
+            articlesViewModelList.SetFollowingAndFavorited(results, currentUser);
 
             return articlesViewModelList;
         }

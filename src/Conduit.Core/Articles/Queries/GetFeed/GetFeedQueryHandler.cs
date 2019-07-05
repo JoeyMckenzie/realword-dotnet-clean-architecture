@@ -1,5 +1,6 @@
 namespace Conduit.Core.Articles.Queries.GetFeed
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading;
@@ -7,6 +8,7 @@ namespace Conduit.Core.Articles.Queries.GetFeed
     using AutoMapper;
     using Domain.Dtos.Articles;
     using Domain.ViewModels;
+    using Extensions;
     using Infrastructure;
     using MediatR;
     using Microsoft.EntityFrameworkCore;
@@ -53,13 +55,17 @@ namespace Conduit.Core.Articles.Queries.GetFeed
             // Get all articles from the followed users
             var feedArticles = followedUsers
                 .SelectMany(uf => uf.UserFollowing.Articles)
-                .OrderByDescending(a => a.CreatedAt);
+                .Skip(request.Offset)
+                .Take(request.Limit)
+                .OrderByDescending(a => a.CreatedAt)
+                .ToList();
 
             // Map the articles to the view model list
             var articleViewModelList = new ArticleViewModelList
             {
                 Articles = _mapper.Map<IEnumerable<ArticleDto>>(feedArticles)
             };
+            articleViewModelList.SetFollowingAndFavorited(feedArticles, currentUser);
 
             return articleViewModelList;
         }

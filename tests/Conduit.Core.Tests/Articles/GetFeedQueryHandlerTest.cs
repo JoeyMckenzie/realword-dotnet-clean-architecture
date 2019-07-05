@@ -1,6 +1,7 @@
 namespace Conduit.Core.Tests.Articles
 {
     using System.Collections.Generic;
+    using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
     using Core.Articles.Queries.GetFeed;
@@ -28,6 +29,26 @@ namespace Conduit.Core.Tests.Articles
             response.Articles.ShouldNotBeNull();
             response.Articles.ShouldBeOfType<List<ArticleDto>>();
             response.Articles.ShouldContain(a => a.Author.Username == "joey.mckenzie");
+            response.Articles.FirstOrDefault(a => a.Author.Username == "joey.mckenzie")?.Author.Following.ShouldBeTrue();
+            response.Articles.FirstOrDefault(a => a.Author.Username == "joey.mckenzie")?.Favorited.ShouldBeTrue();
+        }
+
+        [Fact]
+        public async Task GivenValidRequest_WhenTheRequestDoesNotContainArticlesFromQueryParams_ReturnsEmptyViewModelList()
+        {
+            // Arrange
+            var getFeedQuery = new GetFeedQuery(12, 13);
+
+            // Act
+            var handler = new GetFeedQueryHandler(CurrentUserContext, Context, Mapper);
+            var response = await handler.Handle(getFeedQuery, CancellationToken.None);
+
+            // Assert
+            response.ShouldNotBeNull();
+            response.ShouldBeOfType<ArticleViewModelList>();
+            response.Articles.ShouldNotBeNull();
+            response.Articles.ShouldBeOfType<List<ArticleDto>>();
+            response.Articles.ShouldBeEmpty();
         }
     }
 }
