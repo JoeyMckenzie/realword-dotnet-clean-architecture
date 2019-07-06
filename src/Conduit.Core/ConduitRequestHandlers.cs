@@ -35,7 +35,8 @@ namespace Conduit.Core
                 typeof(GetFeedQueryHandler).Assembly,
                 typeof(GetArticlesQueryHandler).Assembly,
                 typeof(AddCommentCommand).Assembly,
-                typeof(ArticleCommentsQueryHandler).Assembly
+                typeof(ArticleCommentsQueryHandler).Assembly,
+                typeof(DeleteArticleCommandHandler).Assembly
             };
         }
     }

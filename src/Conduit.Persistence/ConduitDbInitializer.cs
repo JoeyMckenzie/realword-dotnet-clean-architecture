@@ -19,7 +19,7 @@ namespace Conduit.Persistence
             SeedArticles(context, userId, out int articleId);
             SeedFavorites(context, articleId, testUserId);
             SeedTags(context, articleId);
-            SeedComments(context, userId, articleId);
+            SeedComments(context, testUserId, articleId);
         }
 
         /// <summary>
@@ -96,8 +96,8 @@ namespace Conduit.Persistence
                 Body = "Very carefully.",
                 Slug = "how-to-train-your-dragon",
                 AuthorId = userId,
-                CreatedAt = DateTime.Now.Add(TimeSpan.FromMinutes(5)),
-                UpdatedAt = DateTime.Now.Add(TimeSpan.FromMinutes(5))
+                CreatedAt = DateTime.Now.AddMinutes(5),
+                UpdatedAt = DateTime.Now.AddMinutes(5)
             };
 
             var testArticleByAnotherUser = new Article
@@ -189,8 +189,8 @@ namespace Conduit.Persistence
                 Body = "This article is terrible!",
                 UserId = context.Users.FirstOrDefault(u => u.UserName == "test.user2")?.Id,
                 ArticleId = articleId,
-                CreatedAt = DateTime.Now.Add(TimeSpan.FromMinutes(5)),
-                UpdatedAt = DateTime.Now.Add(TimeSpan.FromMinutes(5))
+                CreatedAt = DateTime.Now.AddMinutes(5),
+                UpdatedAt = DateTime.Now.AddMinutes(5)
             };
 
             context.Comments.AddRange(comment, comment2);

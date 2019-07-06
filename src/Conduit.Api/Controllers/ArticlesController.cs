@@ -4,6 +4,7 @@ namespace Conduit.Api.Controllers
     using Core.Articles.Commands.AddComment;
     using Core.Articles.Commands.CreateArticle;
     using Core.Articles.Commands.DeleteArticle;
+    using Core.Articles.Commands.DeleteComment;
     using Core.Articles.Commands.UpdateArticle;
     using Core.Articles.Queries.GetArticle;
     using Core.Articles.Queries.GetArticles;
@@ -104,6 +105,17 @@ namespace Conduit.Api.Controllers
         {
             _logger.LogInformation($"Retrieve all comments from article [{slug}]");
             return await Mediator.Send(new ArticleCommentsQuery(slug));
+        }
+
+        [HttpDelete("{slug}/comments/{id}")]
+        [ProducesResponseType(typeof(CommentViewModel), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(CommentViewModel), StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(CommentViewModel), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(CommentViewModel), StatusCodes.Status415UnsupportedMediaType)]
+        public async Task<ActionResult> GetCommentsFromArticle(int id, string slug)
+        {
+            _logger.LogInformation($"Removing comment [{id}] from article [{slug}]");
+            return Ok(await Mediator.Send(new DeleteCommentCommand(id, slug)));
         }
     }
 }
