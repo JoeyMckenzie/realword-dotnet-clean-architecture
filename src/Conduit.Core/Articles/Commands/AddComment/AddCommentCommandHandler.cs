@@ -54,7 +54,6 @@ namespace Conduit.Core.Articles.Commands.AddComment
             };
 
             // Add the comment to the database and link it to its associated article
-            _context.Comments.Add(newComment);
             articleFromSlug.Comments.Add(newComment);
             await _context.SaveChangesAsync(cancellationToken);
 

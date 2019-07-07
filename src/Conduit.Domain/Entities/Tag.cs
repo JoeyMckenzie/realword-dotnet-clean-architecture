@@ -6,11 +6,11 @@ namespace Conduit.Domain.Entities
     {
         public Tag()
         {
-            ArticleTags = new HashSet<ArticleTag>();
+            ArticleTags = new List<ArticleTag>();
         }
 
         public string Description { get; set; }
 
-        public ISet<ArticleTag> ArticleTags { get; }
+        public ICollection<ArticleTag> ArticleTags { get; }
     }
 }

@@ -6,9 +6,9 @@ namespace Conduit.Domain.Entities
     {
         public Article()
         {
-            ArticleTags = new HashSet<ArticleTag>();
-            Favorites = new HashSet<Favorite>();
-            Comments = new HashSet<Comment>();
+            ArticleTags = new List<ArticleTag>();
+            Favorites = new List<Favorite>();
+            Comments = new List<Comment>();
         }
 
         public string Slug { get; set; }
@@ -23,11 +23,11 @@ namespace Conduit.Domain.Entities
 
         public virtual ConduitUser Author { get; set; }
 
-        public ISet<ArticleTag> ArticleTags { get; }
+        public ICollection<ArticleTag> ArticleTags { get; }
 
-        public ISet<Favorite> Favorites { get; }
+        public ICollection<Favorite> Favorites { get; }
 
-        public ISet<Comment> Comments { get; }
+        public ICollection<Comment> Comments { get; }
 
         public int FavoritesCount { get; set; }
     }

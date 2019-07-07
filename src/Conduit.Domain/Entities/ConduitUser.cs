@@ -7,22 +7,22 @@ namespace Conduit.Domain.Entities
     {
         public ConduitUser()
         {
-            Followers = new HashSet<UserFollow>();
-            Following = new HashSet<UserFollow>();
-            Favorites = new HashSet<Favorite>();
-            Articles = new HashSet<Article>();
+            Followers = new List<UserFollow>();
+            Following = new List<UserFollow>();
+            Favorites = new List<Favorite>();
+            Articles = new List<Article>();
         }
 
         public string Bio { get; set; }
 
         public string Image { get; set; }
 
-        public ISet<UserFollow> Followers { get; }
+        public ICollection<UserFollow> Followers { get; }
 
-        public ISet<UserFollow> Following { get; }
+        public ICollection<UserFollow> Following { get; }
 
-        public ISet<Favorite> Favorites { get; }
+        public ICollection<Favorite> Favorites { get; }
 
-        public ISet<Article> Articles { get; }
+        public ICollection<Article> Articles { get; }
     }
 }
