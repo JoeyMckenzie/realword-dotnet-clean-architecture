@@ -2,7 +2,6 @@ namespace Conduit.Core.Articles.Queries.GetCommentsFromArticle
 {
     using System;
     using System.Collections.Generic;
-    using System.Linq;
     using System.Net;
     using System.Threading;
     using System.Threading.Tasks;
@@ -10,17 +9,16 @@ namespace Conduit.Core.Articles.Queries.GetCommentsFromArticle
     using Domain.Dtos.Comments;
     using Domain.ViewModels;
     using Exceptions;
+    using Infrastructure;
     using MediatR;
     using Microsoft.EntityFrameworkCore;
-    using Persistence;
-    using Persistence.Infrastructure;
 
     public class ArticleCommentsQueryHandler : IRequestHandler<ArticleCommentsQuery, CommentViewModelList>
     {
-        private readonly ConduitDbContext _context;
+        private readonly IConduitDbContext _context;
         private readonly IMapper _mapper;
 
-        public ArticleCommentsQueryHandler(ConduitDbContext context, IMapper mapper)
+        public ArticleCommentsQueryHandler(IConduitDbContext context, IMapper mapper)
         {
             _context = context;
             _mapper = mapper;

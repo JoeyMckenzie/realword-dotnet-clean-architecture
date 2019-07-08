@@ -4,29 +4,27 @@ namespace Conduit.Core.Users.Commands.LoginUser
     using System.Threading;
     using System.Threading.Tasks;
     using AutoMapper;
-    using Domain.Dtos;
     using Domain.Dtos.Users;
     using Domain.Entities;
     using Domain.ViewModels;
     using Exceptions;
+    using Extensions;
     using Infrastructure;
     using MediatR;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.Extensions.Logging;
-    using Persistence;
-    using Persistence.Infrastructure;
 
     public class LoginUserCommandHandler : IRequestHandler<LoginUserCommand, UserViewModel>
     {
         private readonly UserManager<ConduitUser> _userManager;
         private readonly ILogger<LoginUserCommandHandler> _logger;
         private readonly ITokenService _tokenService;
-        private readonly ConduitDbContext _context;
+        private readonly IConduitDbContext _context;
         private readonly IMapper _mapper;
 
         public LoginUserCommandHandler(
             UserManager<ConduitUser> userManager,
-            ConduitDbContext context,
+            IConduitDbContext context,
             ITokenService tokenService,
             ILogger<LoginUserCommandHandler> logger,
             IMapper mapper)

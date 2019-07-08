@@ -6,6 +6,9 @@ namespace Conduit.Core.Articles.Commands.DeleteArticle
     {
         public DeleteArticleCommandValidator()
         {
+            RuleFor(c => c.Slug)
+                .NotNull()
+                .NotEmpty();
         }
     }
 }

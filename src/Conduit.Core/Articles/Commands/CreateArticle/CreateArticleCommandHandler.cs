@@ -8,12 +8,11 @@ namespace Conduit.Core.Articles.Commands.CreateArticle
     using Domain.Dtos.Articles;
     using Domain.Entities;
     using Domain.ViewModels;
+    using Extensions;
     using Infrastructure;
     using MediatR;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Logging;
-    using Persistence;
-    using Persistence.Infrastructure;
     using Shared;
     using Shared.Extensions;
 
@@ -21,13 +20,13 @@ namespace Conduit.Core.Articles.Commands.CreateArticle
     {
         private readonly ILogger<CreateArticleCommandHandler> _logger;
         private readonly ICurrentUserContext _currentUserContext;
-        private readonly ConduitDbContext _context;
+        private readonly IConduitDbContext _context;
         private readonly IMapper _mapper;
         private readonly IDateTime _dateTime;
 
         public CreateArticleCommandHandler(
             ICurrentUserContext currentUserContext,
-            ConduitDbContext context,
+            IConduitDbContext context,
             ILogger<CreateArticleCommandHandler> logger,
             IMapper mapper,
             IDateTime dateTime)
@@ -70,7 +69,7 @@ namespace Conduit.Core.Articles.Commands.CreateArticle
                             CreatedAt = _dateTime.Now,
                             UpdatedAt = _dateTime.Now
                         };
-                        await _context.AddAsync(tag, cancellationToken);
+                        await _context.Tags.AddAsync(tag, cancellationToken);
                     }
 
                     newArticle.ArticleTags.Add(new ArticleTag

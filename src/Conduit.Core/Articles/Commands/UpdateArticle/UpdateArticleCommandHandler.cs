@@ -13,7 +13,6 @@ namespace Conduit.Core.Articles.Commands.UpdateArticle
     using MediatR;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Logging;
-    using Persistence;
     using Shared;
     using Shared.Extensions;
 
@@ -21,13 +20,13 @@ namespace Conduit.Core.Articles.Commands.UpdateArticle
     {
         private readonly ILogger<UpdateArticleCommandHandler> _logger;
         private readonly ICurrentUserContext _currentUserContext;
-        private readonly ConduitDbContext _context;
+        private readonly IConduitDbContext _context;
         private readonly IDateTime _dateTime;
         private readonly IMapper _mapper;
 
         public UpdateArticleCommandHandler(
             ILogger<UpdateArticleCommandHandler> logger,
-            ConduitDbContext context,
+            IConduitDbContext context,
             ICurrentUserContext currentUserContext,
             IMapper mapper,
             IDateTime dateTime)

@@ -7,20 +7,19 @@ namespace Conduit.Core.Articles.Commands.DeleteArticle
     using System.Threading.Tasks;
     using Domain.Entities;
     using Exceptions;
+    using Extensions;
     using Infrastructure;
     using MediatR;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Logging;
-    using Persistence;
-    using Persistence.Infrastructure;
 
     public class DeleteArticleCommandHandler : IRequestHandler<DeleteArticleCommand>
     {
         private readonly ILogger<DeleteArticleCommandHandler> _logger;
         private readonly ICurrentUserContext _currentUserContext;
-        private readonly ConduitDbContext _context;
+        private readonly IConduitDbContext _context;
 
-        public DeleteArticleCommandHandler(ILogger<DeleteArticleCommandHandler> logger, ConduitDbContext context, ICurrentUserContext currentUserContext)
+        public DeleteArticleCommandHandler(ILogger<DeleteArticleCommandHandler> logger, IConduitDbContext context, ICurrentUserContext currentUserContext)
         {
             _logger = logger;
             _currentUserContext = currentUserContext;
@@ -50,7 +49,7 @@ namespace Conduit.Core.Articles.Commands.DeleteArticle
                 ActivityType.ArticleDelete,
                 TransactionType.Article,
                 authorOwnedArticleToDelete.Title);
-            _context.Remove(authorOwnedArticleToDelete);
+            _context.Articles.Remove(authorOwnedArticleToDelete);
             await _context.SaveChangesAsync(cancellationToken);
             _logger.LogInformation($"Article [{request.Slug}] successfully removed");
 

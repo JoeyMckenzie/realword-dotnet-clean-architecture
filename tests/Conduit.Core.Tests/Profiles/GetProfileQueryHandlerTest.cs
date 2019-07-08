@@ -19,7 +19,7 @@ namespace Conduit.Core.Tests.Profiles
             var getProfileRequest = new GetProfileQuery("joey.mckenzie");
 
             // Act
-            var request = new GetProfileQueryQueryHandler(Mapper, Context, CurrentUserContext);
+            var request = new GetProfileQueryQueryHandler(Mapper, Context, CurrentUserContext, UserManager);
             var response = await request.Handle(getProfileRequest, CancellationToken.None);
 
             // Assert
@@ -38,7 +38,7 @@ namespace Conduit.Core.Tests.Profiles
             var getProfileRequest = new GetProfileQuery("aUserThatDoesNotExist");
 
             // Act
-            var request = new GetProfileQueryQueryHandler(Mapper, Context, CurrentUserContext);
+            var request = new GetProfileQueryQueryHandler(Mapper, Context, CurrentUserContext, UserManager);
 
             await Should.ThrowAsync<ConduitApiException>(async () =>
             {

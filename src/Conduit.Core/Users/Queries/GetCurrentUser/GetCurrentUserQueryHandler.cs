@@ -7,18 +7,17 @@ namespace Conduit.Core.Users.Queries.GetCurrentUser
     using Domain.Entities;
     using Domain.ViewModels;
     using Exceptions;
+    using Extensions;
     using Infrastructure;
     using MediatR;
-    using Persistence;
-    using Persistence.Infrastructure;
 
     public class GetCurrentUserQueryHandler : IRequestHandler<GetCurrentUserQuery, UserViewModel>
     {
         private readonly ICurrentUserContext _currentUserContext;
-        private readonly ConduitDbContext _context;
+        private readonly IConduitDbContext _context;
         private readonly IMapper _mapper;
 
-        public GetCurrentUserQueryHandler(ICurrentUserContext currentUserContext, IMapper mapper, ConduitDbContext context)
+        public GetCurrentUserQueryHandler(ICurrentUserContext currentUserContext, IMapper mapper, IConduitDbContext context)
         {
             _currentUserContext = currentUserContext;
             _context = context;

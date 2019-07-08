@@ -12,19 +12,18 @@ namespace Conduit.Core.Profiles.Commands.UnfollowUser
     using Infrastructure;
     using MediatR;
     using Microsoft.AspNetCore.Identity;
-    using Persistence;
 
     public class UnfollowUserCommandHandler : IRequestHandler<UnfollowUserCommand, ProfileViewModel>
     {
         private readonly ICurrentUserContext _currentUserContext;
         private readonly UserManager<ConduitUser> _userManager;
-        private readonly ConduitDbContext _context;
+        private readonly IConduitDbContext _context;
         private readonly IMapper _mapper;
 
         public UnfollowUserCommandHandler(
             ICurrentUserContext currentUserContext,
             UserManager<ConduitUser> userManager,
-            ConduitDbContext context,
+            IConduitDbContext context,
             IMapper mapper)
         {
             _currentUserContext = currentUserContext;
@@ -54,7 +53,7 @@ namespace Conduit.Core.Profiles.Commands.UnfollowUser
 
             if (existingUserFollow != null)
             {
-                _context.Remove(existingUserFollow);
+                _context.UserFollows.Remove(existingUserFollow);
                 await _context.SaveChangesAsync(cancellationToken);
             }
 

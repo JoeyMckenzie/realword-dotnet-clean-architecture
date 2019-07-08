@@ -4,6 +4,7 @@
     using System.Diagnostics;
     using System.IO;
     using System.Linq;
+    using Core.Infrastructure;
     using Microsoft.AspNetCore;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.EntityFrameworkCore;
@@ -31,15 +32,16 @@
                 {
                     try
                     {
-                        var context = scope.ServiceProvider.GetService<ConduitDbContext>();
+                        var context = scope.ServiceProvider.GetService<IConduitDbContext>();
+                        var implementedContext = (ConduitDbContext)context;
 
                         // Drop the tables to recreate them with fresh data every server re-roll
                         Console.WriteLine("Initializing database contexts");
                         var timer = new Stopwatch();
                         timer.Start();
-                        context.Database.EnsureDeleted();
-                        context.Database.Migrate();
-                        ConduitDbInitializer.Initialize(context);
+                        implementedContext.Database.EnsureDeleted();
+                        implementedContext.Database.Migrate();
+                        ConduitDbInitializer.Initialize(implementedContext);
                         timer.Stop();
                         Console.WriteLine($"Seeding databases, time to initialize {timer.ElapsedMilliseconds} ms");
                     }

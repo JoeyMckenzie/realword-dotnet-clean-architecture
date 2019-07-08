@@ -1,10 +1,11 @@
 namespace Conduit.Persistence
 {
+    using Core.Infrastructure;
     using Domain.Entities;
     using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore;
 
-    public class ConduitDbContext : IdentityDbContext<ConduitUser>
+    public class ConduitDbContext : IdentityDbContext<ConduitUser>, IConduitDbContext
     {
         public ConduitDbContext(DbContextOptions<ConduitDbContext> options)
             : base(options)

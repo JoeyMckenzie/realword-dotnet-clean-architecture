@@ -1,6 +1,5 @@
 namespace Conduit.Core.Articles.Queries.GetArticle
 {
-    using System;
     using System.Linq;
     using System.Net;
     using System.Threading;
@@ -10,17 +9,15 @@ namespace Conduit.Core.Articles.Queries.GetArticle
     using Domain.ViewModels;
     using Exceptions;
     using Extensions;
+    using Infrastructure;
     using MediatR;
-    using Microsoft.EntityFrameworkCore;
-    using Persistence;
-    using Persistence.Infrastructure;
 
     public class GetArticleQueryHandler : IRequestHandler<GetArticleQuery, ArticleViewModel>
     {
-        private readonly ConduitDbContext _context;
+        private readonly IConduitDbContext _context;
         private readonly IMapper _mapper;
 
-        public GetArticleQueryHandler(ConduitDbContext context, IMapper mapper)
+        public GetArticleQueryHandler(IConduitDbContext context, IMapper mapper)
         {
             _context = context;
             _mapper = mapper;

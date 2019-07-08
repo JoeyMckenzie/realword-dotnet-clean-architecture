@@ -10,13 +10,13 @@
     <PackageReference Include="AutoMapper" Version="8.1.0" />
     <PackageReference Include="FluentValidation" Version="8.4.0" />
     <PackageReference Include="MediatR" Version="7.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="2.2.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.2.4" />
     <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="5.4.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Conduit.Domain\Conduit.Domain.csproj" />
-    <ProjectReference Include="..\Conduit.Persistence\Conduit.Persistence.csproj" />
-    <ProjectReference Include="..\Conduit.Shared\Conduit.Shared.csproj" />
   </ItemGroup>
 
 </Project>

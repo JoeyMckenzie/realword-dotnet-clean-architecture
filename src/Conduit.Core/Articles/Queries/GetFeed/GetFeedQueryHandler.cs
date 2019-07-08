@@ -11,17 +11,16 @@ namespace Conduit.Core.Articles.Queries.GetFeed
     using Infrastructure;
     using MediatR;
     using Microsoft.EntityFrameworkCore;
-    using Persistence;
 
     public class GetFeedQueryHandler : IRequestHandler<GetFeedQuery, ArticleViewModelList>
     {
         private readonly ICurrentUserContext _currentUserContext;
-        private readonly ConduitDbContext _context;
+        private readonly IConduitDbContext _context;
         private readonly IMapper _mapper;
 
         public GetFeedQueryHandler(
             ICurrentUserContext currentUserContext,
-            ConduitDbContext context,
+            IConduitDbContext context,
             IMapper mapper)
         {
             _currentUserContext = currentUserContext;

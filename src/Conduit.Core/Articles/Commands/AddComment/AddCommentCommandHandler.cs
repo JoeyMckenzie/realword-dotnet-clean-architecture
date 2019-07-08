@@ -8,20 +8,19 @@ namespace Conduit.Core.Articles.Commands.AddComment
     using Domain.Entities;
     using Domain.ViewModels;
     using Exceptions;
+    using Extensions;
     using Infrastructure;
     using MediatR;
-    using Persistence;
-    using Persistence.Infrastructure;
     using Shared;
 
     public class AddCommentCommandHandler : IRequestHandler<AddCommentCommand, CommentViewModel>
     {
         private readonly ICurrentUserContext _currentUserContext;
-        private readonly ConduitDbContext _context;
+        private readonly IConduitDbContext _context;
         private readonly IDateTime _dateTime;
         private readonly IMapper _mapper;
 
-        public AddCommentCommandHandler(ICurrentUserContext currentUserContext, ConduitDbContext context, IMapper mapper, IDateTime dateTime)
+        public AddCommentCommandHandler(ICurrentUserContext currentUserContext, IConduitDbContext context, IMapper mapper, IDateTime dateTime)
         {
             _currentUserContext = currentUserContext;
             _context = context;

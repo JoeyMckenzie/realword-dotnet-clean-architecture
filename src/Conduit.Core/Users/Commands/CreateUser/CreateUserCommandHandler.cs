@@ -4,30 +4,28 @@ namespace Conduit.Core.Users.Commands.CreateUser
     using System.Threading;
     using System.Threading.Tasks;
     using AutoMapper;
-    using Domain.Dtos;
     using Domain.Dtos.Users;
     using Domain.Entities;
     using Domain.ViewModels;
     using Exceptions;
+    using Extensions;
     using Infrastructure;
     using MediatR;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.Extensions.Logging;
-    using Persistence;
-    using Persistence.Infrastructure;
 
     public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, UserViewModel>
     {
         private readonly ILogger<CreateUserCommandHandler> _logger;
         private readonly UserManager<ConduitUser> _userManager;
         private readonly ITokenService _tokenService;
-        private readonly ConduitDbContext _context;
+        private readonly IConduitDbContext _context;
         private readonly IMapper _mapper;
 
         public CreateUserCommandHandler(
             ILogger<CreateUserCommandHandler> logger,
             UserManager<ConduitUser> userManager,
-            ConduitDbContext context,
+            IConduitDbContext context,
             IMapper mapper,
             ITokenService tokenService)
         {

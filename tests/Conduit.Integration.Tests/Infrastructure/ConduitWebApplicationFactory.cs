@@ -1,5 +1,9 @@
 namespace Conduit.Integration.Tests.Infrastructure
 {
+    using System;
+    using Core;
+    using Core.Infrastructure;
+    using MediatR;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Mvc.Testing;
     using Microsoft.EntityFrameworkCore;
@@ -10,7 +14,7 @@ namespace Conduit.Integration.Tests.Infrastructure
     /// Integration testing harness for controllers tests.
     /// <see cref="https://docs.microsoft.com/en-us/aspnet/core/test/integration-tests?view=aspnetcore-2.2"/>
     /// </summary>
-    /// <typeparam name="TStartup"></typeparam>
+    /// <typeparam name="TStartup">Startup configuration for API</typeparam>
     public class ConduitWebApplicationFactory<TStartup> : WebApplicationFactory<TStartup>
         where TStartup : class
     {
@@ -23,9 +27,9 @@ namespace Conduit.Integration.Tests.Infrastructure
                     .AddEntityFrameworkInMemoryDatabase()
                     .BuildServiceProvider();
 
-                services.AddDbContext<ConduitDbContext>(options =>
+                services.AddDbContext<IConduitDbContext, ConduitDbContext>(options =>
                 {
-                    options.UseInMemoryDatabase("InMemoryDbForTesting");
+                    options.UseInMemoryDatabase($"{Guid.NewGuid().ToString()}.db");
                     options.UseInternalServiceProvider(serviceProvider);
                 });
 
@@ -36,13 +40,14 @@ namespace Conduit.Integration.Tests.Infrastructure
                 using (var scope = provider.CreateScope())
                 {
                     var scopedServices = scope.ServiceProvider;
-                    var conduitDbContext = scopedServices.GetRequiredService<ConduitDbContext>();
+                    var conduitDbContext = scopedServices.GetRequiredService<IConduitDbContext>();
+                    var implementedContext = (ConduitDbContext)conduitDbContext;
 
                     // Ensure the database is created.
-                    conduitDbContext.Database.EnsureCreated();
+                    implementedContext.Database.EnsureCreated();
 
                     // Seed the database with test data.
-                    ConduitDbInitializer.Initialize(conduitDbContext);
+                    ConduitDbInitializer.Initialize(implementedContext);
                 }
             });
         }

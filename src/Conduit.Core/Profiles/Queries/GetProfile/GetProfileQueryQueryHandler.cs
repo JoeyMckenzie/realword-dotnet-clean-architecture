@@ -13,18 +13,18 @@ namespace Conduit.Core.Profiles.Queries.GetProfile
     using Infrastructure;
     using MediatR;
     using Microsoft.AspNetCore.Identity;
-    using Microsoft.EntityFrameworkCore;
-    using Persistence;
 
     public class GetProfileQueryQueryHandler : IRequestHandler<GetProfileQuery, ProfileViewModel>
     {
         private readonly ICurrentUserContext _currentUserContext;
-        private readonly ConduitDbContext _context;
+        private readonly IConduitDbContext _context;
         private readonly IMapper _mapper;
+        private readonly UserManager<ConduitUser> _userManager;
 
-        public GetProfileQueryQueryHandler(IMapper mapper, ConduitDbContext context, ICurrentUserContext currentUserContext)
+        public GetProfileQueryQueryHandler(IMapper mapper, IConduitDbContext context, ICurrentUserContext currentUserContext, UserManager<ConduitUser> userManager)
         {
             _currentUserContext = currentUserContext;
+            _userManager = userManager;
             _context = context;
             _mapper = mapper;
         }
@@ -32,10 +32,13 @@ namespace Conduit.Core.Profiles.Queries.GetProfile
         public async Task<ProfileViewModel> Handle(GetProfileQuery request, CancellationToken cancellationToken)
         {
             // Search for users using the user manager
+            /*
             var existingUser = await _context.Users
                 .Where(u => string.Equals(u.UserName, request.Username, StringComparison.OrdinalIgnoreCase))
                 .Include(u => u.Followers)
                 .FirstOrDefaultAsync(cancellationToken);
+                */
+            var existingUser = await _userManager.FindByNameAsync(request.Username);
 
             if (existingUser == null)
             {

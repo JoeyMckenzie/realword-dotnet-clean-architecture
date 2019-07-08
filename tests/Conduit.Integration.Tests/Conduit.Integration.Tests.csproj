@@ -18,8 +18,6 @@
 
     <ItemGroup>
       <ProjectReference Include="..\..\src\Conduit.Api\Conduit.Api.csproj" />
-      <ProjectReference Include="..\..\src\Conduit.Domain\Conduit.Domain.csproj" />
-      <ProjectReference Include="..\..\src\Conduit.Persistence\Conduit.Persistence.csproj" />
     </ItemGroup>
 
 </Project>

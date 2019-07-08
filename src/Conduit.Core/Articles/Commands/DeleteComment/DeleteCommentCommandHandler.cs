@@ -9,14 +9,13 @@ namespace Conduit.Core.Articles.Commands.DeleteComment
     using Infrastructure;
     using MediatR;
     using Microsoft.EntityFrameworkCore;
-    using Persistence;
 
     public class DeleteCommentCommandHandler : IRequestHandler<DeleteCommentCommand, Unit>
     {
         private readonly ICurrentUserContext _currentUserContext;
-        private readonly ConduitDbContext _context;
+        private readonly IConduitDbContext _context;
 
-        public DeleteCommentCommandHandler(ConduitDbContext context, ICurrentUserContext currentUserContext)
+        public DeleteCommentCommandHandler(IConduitDbContext context, ICurrentUserContext currentUserContext)
         {
             _context = context;
             _currentUserContext = currentUserContext;
@@ -53,7 +52,7 @@ namespace Conduit.Core.Articles.Commands.DeleteComment
             }
 
             // Delete the comment
-            _context.Remove(commentToDelete);
+            _context.Comments.Remove(commentToDelete);
             await _context.SaveChangesAsync(cancellationToken);
 
             return Unit.Value;

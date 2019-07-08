@@ -14,18 +14,17 @@ namespace Conduit.Core.Articles.Queries.GetArticles
     using MediatR;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.EntityFrameworkCore;
-    using Persistence;
 
     public class GetArticlesQueryHandler : IRequestHandler<GetArticlesQuery, ArticleViewModelList>
     {
         private readonly ICurrentUserContext _currentUserContext;
         private readonly UserManager<ConduitUser> _userManager;
-        private readonly ConduitDbContext _context;
+        private readonly IConduitDbContext _context;
         private readonly IMapper _mapper;
 
         public GetArticlesQueryHandler(
             UserManager<ConduitUser> userManager,
-            ConduitDbContext context,
+            IConduitDbContext context,
             IMapper mapper,
             ICurrentUserContext currentUserContext)
         {

@@ -56,8 +56,13 @@
                     "ConduitDbContextHealthCheck",
                     customTestQuery: async (context, token) => await context.ActivityLogs.AsNoTracking().ToListAsync(token) != null);
 
+            // Add MediatR pipeline
+            services.AddMediatR(ConduitRequestHandlers.GetRequestHandlerAssemblies());
+            services.AddTransient(typeof(IPipelineBehavior<,>), typeof(RequestPreProcessorBehavior<,>));
+            services.AddTransient(typeof(IPipelineBehavior<,>), typeof(RequestValidationBehavior<,>));
+
             // Add EF Core
-            services.AddDbContext<ConduitDbContext>(options =>
+            services.AddDbContext<IConduitDbContext, ConduitDbContext>(options =>
                 options.UseSqlServer(Configuration["Conduit"]));
 
             // Add Identity
@@ -68,7 +73,7 @@
                     options.Password.RequireUppercase = false;
                     options.Password.RequireNonAlphanumeric = false;
                 })
-                .AddEntityFrameworkStores<ConduitDbContext>()
+                .AddEntityFrameworkStores<IConduitDbContext>()
                 .AddDefaultTokenProviders();
 
             // Add miscellaneous services
@@ -76,10 +81,6 @@
             services.AddTransient<IDateTime, MachineDateTime>();
             services.AddTransient<ICurrentUserContext, CurrentUserContext>();
 
-            // Add MediatR pipeline
-            services.AddTransient(typeof(IPipelineBehavior<,>), typeof(RequestPreProcessorBehavior<,>));
-            services.AddTransient(typeof(IPipelineBehavior<,>), typeof(RequestValidationBehavior<,>));
-            services.AddMediatR(ConduitRequestHandlers.GetRequestHandlerAssemblies());
 
             // Add swagger
             services.AddSwashbuckleSwagger();

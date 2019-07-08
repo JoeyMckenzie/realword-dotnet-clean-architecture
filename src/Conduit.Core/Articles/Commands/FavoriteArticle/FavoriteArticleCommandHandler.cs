@@ -6,15 +6,14 @@ namespace Conduit.Core.Articles.Commands.FavoriteArticle
     using Domain.ViewModels;
     using Infrastructure;
     using MediatR;
-    using Persistence;
 
     public class FavoriteArticleCommandHandler : IRequestHandler<FavoriteArticleCommand, ArticleViewModel>
     {
         private readonly ICurrentUserContext _currentUserContext;
-        private readonly ConduitDbContext _context;
+        private readonly IConduitDbContext _context;
         private readonly IMapper _mapper;
 
-        public FavoriteArticleCommandHandler(ICurrentUserContext currentUserContext, ConduitDbContext context, IMapper mapper)
+        public FavoriteArticleCommandHandler(ICurrentUserContext currentUserContext, IConduitDbContext context, IMapper mapper)
         {
             _currentUserContext = currentUserContext;
             _context = context;

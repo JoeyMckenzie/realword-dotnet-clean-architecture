@@ -24,10 +24,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Conduit.Core\Conduit.Core.csproj" />
     <ProjectReference Include="..\Conduit.Infrastructure\Conduit.Infrastructure.csproj" />
     <ProjectReference Include="..\Conduit.Persistence\Conduit.Persistence.csproj" />
-    <ProjectReference Include="..\Conduit.Shared\Conduit.Shared.csproj" />
   </ItemGroup>
 
 </Project>

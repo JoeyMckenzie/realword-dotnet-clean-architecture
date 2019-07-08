@@ -9,12 +9,12 @@ namespace Conduit.Core.Users.Commands.UpdateUser
     using Domain.Entities;
     using Domain.ViewModels;
     using Exceptions;
+    using Extensions;
     using Infrastructure;
     using MediatR;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-    using Persistence;
-    using Persistence.Infrastructure;
+    using Microsoft.EntityFrameworkCore;
     using Shared.Extensions;
 
     public class UpdateUserCommandHandler : IRequestHandler<UpdateUserCommand, UserViewModel>
@@ -22,14 +22,14 @@ namespace Conduit.Core.Users.Commands.UpdateUser
         private readonly ICurrentUserContext _currentUserContext;
         private readonly UserManager<ConduitUser> _userManager;
         private readonly ITokenService _tokenService;
-        private readonly ConduitDbContext _context;
+        private readonly IConduitDbContext _context;
         private readonly IMapper _mapper;
 
         public UpdateUserCommandHandler(
             ICurrentUserContext currentUserContext,
             IMapper mapper,
             UserManager<ConduitUser> userManager,
-            ConduitDbContext context,
+            IConduitDbContext context,
             ITokenService tokenService)
         {
             _currentUserContext = currentUserContext;
@@ -81,7 +81,7 @@ namespace Conduit.Core.Users.Commands.UpdateUser
             if (!string.IsNullOrWhiteSpace(request.User.Password))
             {
                 await _userManager.RemovePasswordAsync(currentUser);
-                var userStore = new UserStore<ConduitUser>(_context);
+                var userStore = new UserStore<ConduitUser>((DbContext)_context);
                 await userStore.SetPasswordHashAsync(
                     currentUser,
                     new PasswordHasher<ConduitUser>().HashPassword(currentUser, request.User.Password),

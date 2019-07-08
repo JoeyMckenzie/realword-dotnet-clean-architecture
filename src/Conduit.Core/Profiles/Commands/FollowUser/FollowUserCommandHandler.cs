@@ -1,6 +1,5 @@
 namespace Conduit.Core.Profiles.Commands.FollowUser
 {
-    using System;
     using System.Linq;
     using System.Net;
     using System.Threading;
@@ -13,20 +12,19 @@ namespace Conduit.Core.Profiles.Commands.FollowUser
     using Infrastructure;
     using MediatR;
     using Microsoft.AspNetCore.Identity;
-    using Persistence;
     using Shared;
 
     public class FollowUserCommandHandler : IRequestHandler<FollowUserCommand, ProfileViewModel>
     {
         private readonly ICurrentUserContext _currentUserContext;
         private readonly UserManager<ConduitUser> _userManager;
-        private readonly ConduitDbContext _context;
+        private readonly IConduitDbContext _context;
         private readonly IDateTime _dateTime;
         private readonly IMapper _mapper;
 
         public FollowUserCommandHandler(
             ICurrentUserContext currentUserContext,
-            ConduitDbContext context,
+            IConduitDbContext context,
             IMapper mapper,
             UserManager<ConduitUser> userManager,
             IDateTime dateTime)
