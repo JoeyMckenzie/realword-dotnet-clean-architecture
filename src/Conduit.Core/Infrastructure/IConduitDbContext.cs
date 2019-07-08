@@ -20,7 +20,7 @@ namespace Conduit.Core.Infrastructure
         DbSet<Favorite> Favorites { get; set; }
 
         DbSet<UserFollow> UserFollows { get; set; }
-        
+
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);
     }
 }

@@ -73,14 +73,13 @@
                     options.Password.RequireUppercase = false;
                     options.Password.RequireNonAlphanumeric = false;
                 })
-                .AddEntityFrameworkStores<IConduitDbContext>()
+                .AddEntityFrameworkStores<ConduitDbContext>()
                 .AddDefaultTokenProviders();
 
             // Add miscellaneous services
             services.AddAutoMapper(typeof(MappingProfile).GetTypeInfo().Assembly);
             services.AddTransient<IDateTime, MachineDateTime>();
             services.AddTransient<ICurrentUserContext, CurrentUserContext>();
-
 
             // Add swagger
             services.AddSwashbuckleSwagger();
