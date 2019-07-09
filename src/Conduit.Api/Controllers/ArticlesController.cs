@@ -5,6 +5,7 @@ namespace Conduit.Api.Controllers
     using Core.Articles.Commands.CreateArticle;
     using Core.Articles.Commands.DeleteArticle;
     using Core.Articles.Commands.DeleteComment;
+    using Core.Articles.Commands.FavoriteArticle;
     using Core.Articles.Commands.UpdateArticle;
     using Core.Articles.Queries.GetArticle;
     using Core.Articles.Queries.GetArticles;
@@ -116,6 +117,17 @@ namespace Conduit.Api.Controllers
         {
             _logger.LogInformation($"Removing comment [{id}] from article [{slug}]");
             return Ok(await Mediator.Send(new DeleteCommentCommand(id, slug)));
+        }
+
+        [HttpPost("{slug}/favorite")]
+        [ProducesResponseType(typeof(CommentViewModel), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(CommentViewModel), StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(CommentViewModel), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(CommentViewModel), StatusCodes.Status415UnsupportedMediaType)]
+        public async Task<ArticleViewModel> FavoriteArticle(string slug)
+        {
+            _logger.LogInformation($"Favoriting article [{slug}]");
+            return await Mediator.Send(new FavoriteArticleCommand(slug));
         }
     }
 }

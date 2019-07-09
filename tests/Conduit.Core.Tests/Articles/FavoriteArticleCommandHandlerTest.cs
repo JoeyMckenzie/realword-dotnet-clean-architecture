@@ -26,7 +26,7 @@ namespace Conduit.Core.Tests.Articles
             article.FavoritesCount.ShouldBe(1);
 
             // Act
-            var handler = new FavoriteArticleCommandHandler(CurrentUserContext, Context, Mapper);
+            var handler = new FavoriteArticleCommandHandler(CurrentUserContext, Context, Mapper, MachineDateTime);
             var response = await handler.Handle(favoriteArticleCommand, CancellationToken.None);
 
             // Assert
@@ -52,7 +52,7 @@ namespace Conduit.Core.Tests.Articles
             article.FavoritesCount.ShouldBe(1);
 
             // Act
-            var handler = new FavoriteArticleCommandHandler(CurrentUserContext, Context, Mapper);
+            var handler = new FavoriteArticleCommandHandler(CurrentUserContext, Context, Mapper, MachineDateTime);
             await handler.Handle(favoriteArticleCommand, CancellationToken.None);
             var response = await handler.Handle(favoriteArticleCommand, CancellationToken.None);
 
@@ -74,7 +74,7 @@ namespace Conduit.Core.Tests.Articles
             var favoriteArticleCommand = new FavoriteArticleCommand("how-to-not-train-your-dragon");
 
             // Act
-            var handler = new FavoriteArticleCommandHandler(CurrentUserContext, Context, Mapper);
+            var handler = new FavoriteArticleCommandHandler(CurrentUserContext, Context, Mapper, MachineDateTime);
             var response = await Should.ThrowAsync<ConduitApiException>(async () =>
             {
                 await handler.Handle(favoriteArticleCommand, CancellationToken.None);

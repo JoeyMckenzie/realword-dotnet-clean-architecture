@@ -1,5 +1,6 @@
 namespace Conduit.Integration.Tests.Articles
 {
+    using System.Net;
     using System.Threading.Tasks;
     using Domain.Dtos;
     using Domain.Dtos.Articles;
@@ -60,7 +61,7 @@ namespace Conduit.Integration.Tests.Articles
             var responseContent = await ContentHelper.GetResponseContent<ErrorViewModel>(response);
 
             // Assert
-            response.EnsureSuccessStatusCode();
+            response.StatusCode.ShouldBe(HttpStatusCode.NotFound);
             responseContent.ShouldNotBeNull();
             responseContent.ShouldBeOfType<ErrorViewModel>();
             responseContent.Errors.ShouldNotBeNull();
