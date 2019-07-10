@@ -14,16 +14,25 @@ namespace Conduit.Core.Tests.Articles
 
     public class FavoriteArticleCommandHandlerTest : TestFixture
     {
+        public FavoriteArticleCommandHandlerTest()
+        {
+            // Reset favorites
+            var article = Context.Articles.FirstOrDefault(a => a.Slug == "how-to-train-your-dragon");
+            article.ShouldNotBeNull();
+            article.Favorites.Clear();
+            article.FavoritesCount--;
+            Context.SaveChanges();
+        }
+
         [Fact]
         public async Task GivenValidRequest_WhenTheArticleExists_ReturnsFavoritedArticleViewModel()
         {
-            // Arrange
+            // Arrange, remove existing favorite
             var favoriteArticleCommand = new FavoriteArticleCommand("how-to-train-your-dragon");
             var article = Context.Articles.FirstOrDefault(a => a.Slug == "how-to-train-your-dragon");
             article.ShouldNotBeNull();
-            article.Favorites.ShouldContain(f => f.User.UserName == "test.user2");
             article.Favorites.ShouldNotContain(f => f.User.UserName == "test.user");
-            article.FavoritesCount.ShouldBe(1);
+            article.FavoritesCount.ShouldBe(0);
 
             // Act
             var handler = new FavoriteArticleCommandHandler(CurrentUserContext, Context, Mapper, MachineDateTime);
@@ -35,9 +44,8 @@ namespace Conduit.Core.Tests.Articles
             response.Article.ShouldNotBeNull();
             response.Article.ShouldBeOfType<ArticleDto>();
             response.Article.Favorited.ShouldBeTrue();
-            article.Favorites.ShouldContain(f => f.User.UserName == "test.user2");
             article.Favorites.ShouldContain(f => f.User.UserName == "test.user");
-            article.FavoritesCount.ShouldBe(2);
+            article.FavoritesCount.ShouldBe(1);
         }
 
         [Fact]
@@ -47,9 +55,8 @@ namespace Conduit.Core.Tests.Articles
             var favoriteArticleCommand = new FavoriteArticleCommand("how-to-train-your-dragon");
             var article = Context.Articles.FirstOrDefault(a => a.Slug == "how-to-train-your-dragon");
             article.ShouldNotBeNull();
-            article.Favorites.ShouldContain(f => f.User.UserName == "test.user2");
             article.Favorites.ShouldNotContain(f => f.User.UserName == "test.user");
-            article.FavoritesCount.ShouldBe(1);
+            article.FavoritesCount.ShouldBe(0);
 
             // Act
             var handler = new FavoriteArticleCommandHandler(CurrentUserContext, Context, Mapper, MachineDateTime);
@@ -62,9 +69,8 @@ namespace Conduit.Core.Tests.Articles
             response.Article.ShouldNotBeNull();
             response.Article.ShouldBeOfType<ArticleDto>();
             response.Article.Favorited.ShouldBeTrue();
-            article.Favorites.ShouldContain(f => f.User.UserName == "test.user2");
             article.Favorites.ShouldContain(f => f.User.UserName == "test.user");
-            article.FavoritesCount.ShouldBe(2);
+            article.FavoritesCount.ShouldBe(1);
         }
 
         [Fact]

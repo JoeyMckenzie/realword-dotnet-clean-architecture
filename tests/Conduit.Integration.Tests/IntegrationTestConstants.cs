@@ -23,5 +23,14 @@ namespace Conduit.Integration.Tests
                 Password = "#passwordTwo1!"
             }
         };
+
+        public static readonly LoginUserCommand BackupUser = new LoginUserCommand
+        {
+            User = new UserLoginDto
+            {
+                Email = "test.user2@gmail.com",
+                Password = "#password3!"
+            }
+        };
     }
 }

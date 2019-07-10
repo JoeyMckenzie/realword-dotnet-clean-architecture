@@ -15,7 +15,7 @@ namespace Conduit.Integration.Tests.Articles
         public async Task GivenValidRequest_WhenTheArticleExists_ReturnsArticleViewModelWithSuccessfulResponse()
         {
             // Arrange
-            await ContentHelper.GetRequestWithAuthorization(Client, IntegrationTestConstants.SecondaryUser);
+            await ContentHelper.GetRequestWithAuthorization(Client, IntegrationTestConstants.BackupUser);
 
             // Act
             var response = await Client.PostAsync($"{ArticlesEndpoint}/how-to-train-your-dragon/favorite", null);
@@ -34,7 +34,7 @@ namespace Conduit.Integration.Tests.Articles
         public async Task GivenValidRequest_WhenTheUserHasAlreadyFavoritedTheArticle_ReturnsArticleViewModelWithSuccessfulResponse()
         {
             // Arrange
-            await ContentHelper.GetRequestWithAuthorization(Client, IntegrationTestConstants.SecondaryUser);
+            await ContentHelper.GetRequestWithAuthorization(Client, IntegrationTestConstants.BackupUser);
 
             // Act
             await Client.PostAsync($"{ArticlesEndpoint}/how-to-train-your-dragon/favorite", null);
@@ -54,7 +54,7 @@ namespace Conduit.Integration.Tests.Articles
         public async Task GivenValidRequest_WhenTheArticleDoesNotExist_ReturnsErrorViewModelWithNotFound()
         {
             // Arrange
-            await ContentHelper.GetRequestWithAuthorization(Client, IntegrationTestConstants.SecondaryUser);
+            await ContentHelper.GetRequestWithAuthorization(Client, IntegrationTestConstants.BackupUser);
 
             // Act
             var response = await Client.PostAsync($"{ArticlesEndpoint}/how-to-not-train-your-dragon/favorite", null);

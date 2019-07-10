@@ -17,7 +17,7 @@ namespace Conduit.Persistence
             SeedConduitUsers(context, out string userId, out string testUserId);
             SeedUserFollows(context, testUserId, userId);
             SeedArticles(context, userId, out int articleId);
-            SeedFavorites(context, articleId, context.Users.FirstOrDefault(u => u.UserName == "test.user2")?.Id);
+            SeedFavorites(context, articleId, testUserId);
             SeedTags(context, articleId);
             SeedComments(context, testUserId, articleId);
         }
