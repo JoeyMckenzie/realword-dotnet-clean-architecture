@@ -4,6 +4,8 @@ namespace Conduit.Core
     using Articles.Commands.AddComment;
     using Articles.Commands.CreateArticle;
     using Articles.Commands.DeleteArticle;
+    using Articles.Commands.FavoriteArticle;
+    using Articles.Commands.UnfavoriteArticle;
     using Articles.Queries.GetArticles;
     using Articles.Queries.GetCommentsFromArticle;
     using Articles.Queries.GetFeed;
@@ -36,7 +38,8 @@ namespace Conduit.Core
                 typeof(GetArticlesQueryHandler).Assembly,
                 typeof(AddCommentCommand).Assembly,
                 typeof(ArticleCommentsQueryHandler).Assembly,
-                typeof(DeleteArticleCommandHandler).Assembly
+                typeof(FavoriteArticleCommandHandler).Assembly,
+                typeof(UnfavoriteArticleCommandHandler).Assembly
             };
         }
     }
