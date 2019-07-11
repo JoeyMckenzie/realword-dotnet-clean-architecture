@@ -7,9 +7,9 @@ namespace Conduit.Domain.ViewModels
     {
         public TagViewModel()
         {
-            Tags = new HashSet<Tag>();
+            Tags = new List<Tag>();
         }
 
-        public ISet<Tag> Tags { get; }
+        public ICollection<Tag> Tags { get; }
     }
 }
