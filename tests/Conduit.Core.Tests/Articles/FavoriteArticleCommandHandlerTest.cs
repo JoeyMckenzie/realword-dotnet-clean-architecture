@@ -20,7 +20,6 @@ namespace Conduit.Core.Tests.Articles
             var article = Context.Articles.FirstOrDefault(a => a.Slug == "how-to-train-your-dragon");
             article.ShouldNotBeNull();
             article.Favorites.Clear();
-            article.FavoritesCount--;
             Context.SaveChanges();
         }
 

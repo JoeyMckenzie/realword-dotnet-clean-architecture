@@ -235,7 +235,6 @@ namespace Conduit.Persistence
 
             // Update the favorite count for the article and save the changes
             var article = context.Articles.Find(articleId);
-            article.FavoritesCount++;
             context.Articles.Update(article);
 
             context.SaveChanges();

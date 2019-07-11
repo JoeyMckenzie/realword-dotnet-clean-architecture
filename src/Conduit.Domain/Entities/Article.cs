@@ -29,6 +29,6 @@ namespace Conduit.Domain.Entities
 
         public ICollection<Comment> Comments { get; }
 
-        public int FavoritesCount { get; set; }
+        public int FavoritesCount => Favorites.Count;
     }
 }

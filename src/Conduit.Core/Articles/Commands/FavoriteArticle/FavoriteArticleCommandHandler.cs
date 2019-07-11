@@ -53,9 +53,6 @@ namespace Conduit.Core.Articles.Commands.FavoriteArticle
                     UpdatedAt = _dateTime.Now
                 });
 
-                // Increment the favorites count
-                articleFromSlug.FavoritesCount++;
-
                 await _context.SaveChangesAsync(cancellationToken);
             }
 
