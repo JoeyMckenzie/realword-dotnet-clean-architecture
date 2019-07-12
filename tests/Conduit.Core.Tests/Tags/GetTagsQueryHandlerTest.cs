@@ -24,7 +24,7 @@ namespace Conduit.Core.Tests.Tags
 
             // Assert
             response.ShouldNotBeNull();
-            response.ShouldBeOfType<TagViewModel>();
+            response.ShouldBeOfType<TagViewModelList>();
             response.Tags.ShouldNotBeNull();
             response.Tags.ShouldBeOfType<List<string>>();
             response.Tags.ShouldNotBeEmpty();
@@ -45,7 +45,7 @@ namespace Conduit.Core.Tests.Tags
 
             // Assert
             response.ShouldNotBeNull();
-            response.ShouldBeOfType<TagViewModel>();
+            response.ShouldBeOfType<TagViewModelList>();
             response.Tags.ShouldNotBeNull();
             response.Tags.ShouldBeOfType<List<string>>();
             response.Tags.ShouldBeEmpty();

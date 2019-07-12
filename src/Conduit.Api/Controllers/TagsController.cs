@@ -3,6 +3,7 @@ namespace Conduit.Api.Controllers
     using System.Threading.Tasks;
     using Core.Tags.Queries.GetTags;
     using Domain.ViewModels;
+    using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Logging;
 
@@ -16,7 +17,8 @@ namespace Conduit.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<TagViewModel> GetTagList()
+        [ProducesResponseType(typeof(TagViewModelList), StatusCodes.Status200OK)]
+        public async Task<TagViewModelList> GetTagList()
         {
             _logger.LogInformation("Retrieving list of tags");
             return await Mediator.Send(new GetTagsQuery());

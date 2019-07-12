@@ -2,7 +2,6 @@ namespace Conduit.Integration.Tests.Tags
 {
     using System.Collections.Generic;
     using System.Threading.Tasks;
-    using Domain.Entities;
     using Domain.ViewModels;
     using Infrastructure;
     using Shouldly;
@@ -15,31 +14,15 @@ namespace Conduit.Integration.Tests.Tags
         {
             // Act
             var response = await Client.GetAsync(TagsEndpoint);
-            var responseContent = await ContentHelper.GetResponseContent<TagViewModel>(response);
+            var responseContent = await ContentHelper.GetResponseContent<TagViewModelList>(response);
 
             // Assert
             response.EnsureSuccessStatusCode();
             responseContent.ShouldNotBeNull();
-            responseContent.ShouldBeOfType<TagViewModel>();
+            responseContent.ShouldBeOfType<TagViewModelList>();
             responseContent.Tags.ShouldNotBeNull();
             responseContent.Tags.ShouldBeOfType<List<string>>();
             responseContent.Tags.ShouldNotBeEmpty();
-        }
-
-        [Fact]
-        public async Task GivenValidRequest_WhenNoAuthenticationIsRequiredAndNoTagsExist_ReturnsEmptyTagViewModelWithSuccessfulResponse()
-        {
-            // Act
-            var response = await Client.GetAsync(TagsEndpoint);
-            var responseContent = await ContentHelper.GetResponseContent<TagViewModel>(response);
-
-            // Assert
-            response.EnsureSuccessStatusCode();
-            responseContent.ShouldNotBeNull();
-            responseContent.ShouldBeOfType<TagViewModel>();
-            responseContent.Tags.ShouldNotBeNull();
-            responseContent.Tags.ShouldBeOfType<List<Tag>>();
-            responseContent.Tags.ShouldBeEmpty();
         }
     }
 }
