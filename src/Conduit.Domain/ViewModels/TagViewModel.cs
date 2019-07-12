@@ -1,15 +1,15 @@
 namespace Conduit.Domain.ViewModels
 {
     using System.Collections.Generic;
-    using Entities;
+    using Dtos;
 
     public class TagViewModel
     {
         public TagViewModel()
         {
-            Tags = new List<Tag>();
+            Tags = new List<string>();
         }
 
-        public ICollection<Tag> Tags { get; }
+        public ICollection<string> Tags { get; }
     }
 }

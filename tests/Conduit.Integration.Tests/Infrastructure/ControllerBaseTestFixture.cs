@@ -11,6 +11,7 @@ namespace Conduit.Integration.Tests.Infrastructure
         protected const string RegisterEndpoint = "/api/users";
         protected const string UpdateUserEndpoint = "/api/user";
         protected const string ProfilesEndpoint = "/api/profiles";
+        protected const string TagsEndpoint = "/api/tags";
         private HttpClient _httpClient;
 
         protected HttpClient Client => _httpClient ?? (_httpClient = new ConduitWebApplicationFactory<Startup>().CreateClient());
