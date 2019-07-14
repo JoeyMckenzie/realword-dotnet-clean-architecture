@@ -92,6 +92,7 @@
                 .AddMvc()
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
                 .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<CreateUserCommandValidator>());
+            services.AddCors();
 
             // Override built in model state validation
             services.Configure<ApiBehaviorOptions>(options => options.SuppressModelStateInvalidFilter = true);
@@ -107,6 +108,7 @@
             else
             {
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+                app.UseHttpsRedirection();
                 app.UseHsts();
             }
 
@@ -131,7 +133,6 @@
                     "/swagger/v1/swagger.json",
                     $"Conduit API version {ConduitConstants.ApiVersion}"));
             app.UseAuthentication();
-            app.UseHttpsRedirection();
             app.UseMvc();
         }
     }

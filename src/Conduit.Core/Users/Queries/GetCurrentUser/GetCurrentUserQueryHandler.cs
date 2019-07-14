@@ -1,12 +1,11 @@
 namespace Conduit.Core.Users.Queries.GetCurrentUser
 {
-    using System.Net;
     using System.Threading;
     using System.Threading.Tasks;
     using AutoMapper;
+    using Domain.Dtos.Users;
     using Domain.Entities;
     using Domain.ViewModels;
-    using Exceptions;
     using Infrastructure;
     using MediatR;
     using Persistence;
@@ -27,15 +26,14 @@ namespace Conduit.Core.Users.Queries.GetCurrentUser
 
         public async Task<UserViewModel> Handle(GetCurrentUserQuery request, CancellationToken cancellationToken)
         {
-            var currentUser = _currentUserContext.GetCurrentUserContext().Result;
-
-            if (currentUser == null)
-            {
-                throw new ConduitApiException("Could not retrieve the current user", HttpStatusCode.BadRequest);
-            }
+            // Retrieve the current user
+            var currentUser = await _currentUserContext.GetCurrentUserContext();
 
             // Map to the user view model and log activity
-            var userViewModel = _mapper.Map<UserViewModel>(currentUser);
+            var userViewModel = new UserViewModel
+            {
+                User = _mapper.Map<UserDto>(currentUser)
+            };
             await _context.AddActivityAndSaveChangesAsync(ActivityType.UserRetrieved, TransactionType.ConduitUser, currentUser.Id, cancellationToken);
 
             return userViewModel;

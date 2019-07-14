@@ -18,7 +18,6 @@ namespace Conduit.Core.Articles.Queries.GetArticles
 
     public class GetArticlesQueryHandler : IRequestHandler<GetArticlesQuery, ArticleViewModelList>
     {
-        private readonly ICurrentUserContext _currentUserContext;
         private readonly UserManager<ConduitUser> _userManager;
         private readonly ConduitDbContext _context;
         private readonly IMapper _mapper;
@@ -26,10 +25,8 @@ namespace Conduit.Core.Articles.Queries.GetArticles
         public GetArticlesQueryHandler(
             UserManager<ConduitUser> userManager,
             ConduitDbContext context,
-            IMapper mapper,
-            ICurrentUserContext currentUserContext)
+            IMapper mapper)
         {
-            _currentUserContext = currentUserContext;
             _userManager = userManager;
             _context = context;
             _mapper = mapper;
@@ -90,8 +87,10 @@ namespace Conduit.Core.Articles.Queries.GetArticles
             // Filter on favorited
             if (!string.IsNullOrWhiteSpace(request.Favorited))
             {
-                // If not favorited articles on found by the user, return an empty list
-                if (articles.Any(a => a.Favorites.Select(f => f.User).Contains(author)))
+                author = author ?? await _userManager.FindByNameAsync(request.Favorited);
+
+                // If no favorited articles are found by the user, return an empty list
+                if (author != null && articles.Any(a => a.Favorites.Select(f => f.User).Contains(author)))
                 {
                     articles = articles.Where(a => a.Favorites.Select(f => f.User).Contains(author));
                 }
@@ -112,10 +111,6 @@ namespace Conduit.Core.Articles.Queries.GetArticles
             {
                 Articles = _mapper.Map<IEnumerable<ArticleDto>>(results)
             };
-
-            // Set the following and favorited status of each article
-            var currentUser = await _currentUserContext.GetCurrentUserContext();
-            articlesViewModelList.SetViewModelProperties(results, currentUser, articles.SelectMany(a => a.ArticleTags).ToList());
 
             return articlesViewModelList;
         }

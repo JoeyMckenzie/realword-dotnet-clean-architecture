@@ -20,7 +20,7 @@ namespace Conduit.Core.Tests.Articles
             var getArticlesCommand = new GetArticlesQuery("dragons", "joey.mckenzie", null, null, null);
 
             // Act
-            var command = new GetArticlesQueryHandler(UserManager, Context, Mapper, CurrentUserContext);
+            var command = new GetArticlesQueryHandler(UserManager, Context, Mapper);
             var response = await command.Handle(getArticlesCommand, CancellationToken.None);
 
             // Assert
@@ -29,8 +29,6 @@ namespace Conduit.Core.Tests.Articles
             response.Articles.ShouldNotBeNull();
             response.Articles.ShouldBeOfType<List<ArticleDto>>();
             response.Articles.ShouldNotBeEmpty();
-            response.Articles.FirstOrDefault()?.Author.Following.ShouldBeTrue();
-            response.Articles.FirstOrDefault()?.Favorited.ShouldBeTrue();
             response.Articles.FirstOrDefault()?.TagList.ShouldContain("dragons");
         }
 
@@ -41,7 +39,7 @@ namespace Conduit.Core.Tests.Articles
             var getArticlesCommand = new GetArticlesQuery(null, "joey.mckenzie", "thisUserDoesNotExist", null, null);
 
             // Act
-            var command = new GetArticlesQueryHandler(UserManager, Context, Mapper, CurrentUserContext);
+            var command = new GetArticlesQueryHandler(UserManager, Context, Mapper);
             var response = await command.Handle(getArticlesCommand, CancellationToken.None);
 
             // Assert
@@ -62,7 +60,7 @@ namespace Conduit.Core.Tests.Articles
             var getArticlesCommand = new GetArticlesQuery(null, null, null, null, null);
 
             // Act
-            var command = new GetArticlesQueryHandler(UserManager, Context, Mapper, CurrentUserContext);
+            var command = new GetArticlesQueryHandler(UserManager, Context, Mapper);
             var response = await command.Handle(getArticlesCommand, CancellationToken.None);
 
             // Assert
@@ -72,11 +70,7 @@ namespace Conduit.Core.Tests.Articles
             response.Articles.ShouldBeOfType<List<ArticleDto>>();
             response.Articles.ShouldNotBeEmpty();
             response.ArticlesCount.ShouldBe(2);
-            response.Articles.FirstOrDefault(a => a.Author.Username == "joey.mckenzie")?.Author.Following.ShouldBeTrue();
-            response.Articles.FirstOrDefault(a => a.Author.Username == "joey.mckenzie")?.Favorited.ShouldBeTrue();
             response.Articles.FirstOrDefault(a => a.Author.Username == "joey.mckenzie")?.TagList.ShouldNotBeEmpty();
-            response.Articles.FirstOrDefault(a => a.Author.Username == "test.user")?.Author.Following.ShouldBeFalse();
-            response.Articles.FirstOrDefault(a => a.Author.Username == "test.user")?.Favorited.ShouldBeFalse();
             response.Articles.FirstOrDefault(a => a.Author.Username == "test.user")?.TagList.ShouldNotBeEmpty();
         }
 
@@ -87,7 +81,7 @@ namespace Conduit.Core.Tests.Articles
             var getArticlesCommand = new GetArticlesQuery(null, null, null, 1, null);
 
             // Act
-            var command = new GetArticlesQueryHandler(UserManager, Context, Mapper, CurrentUserContext);
+            var command = new GetArticlesQueryHandler(UserManager, Context, Mapper);
             var response = await command.Handle(getArticlesCommand, CancellationToken.None);
 
             // Assert
@@ -98,8 +92,6 @@ namespace Conduit.Core.Tests.Articles
             response.Articles.ShouldNotBeEmpty();
             response.Articles.Count().ShouldBe(1);
             response.Articles.ShouldContain(a => a.Author.Username == "joey.mckenzie");
-            response.Articles.FirstOrDefault(a => a.Author.Username == "joey.mckenzie")?.Author.Following.ShouldBeTrue();
-            response.Articles.FirstOrDefault(a => a.Author.Username == "joey.mckenzie")?.Favorited.ShouldBeTrue();
             response.Articles.FirstOrDefault(a => a.Author.Username == "joey.mckenzie")?.TagList.ShouldNotBeEmpty();
         }
 
@@ -110,7 +102,7 @@ namespace Conduit.Core.Tests.Articles
             var getArticlesCommand = new GetArticlesQuery(null, null, null, null, 1);
 
             // Act
-            var command = new GetArticlesQueryHandler(UserManager, Context, Mapper, CurrentUserContext);
+            var command = new GetArticlesQueryHandler(UserManager, Context, Mapper);
             var response = await command.Handle(getArticlesCommand, CancellationToken.None);
 
             // Assert

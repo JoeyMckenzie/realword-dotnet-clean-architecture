@@ -59,6 +59,7 @@ namespace Conduit.Api.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         [ProducesResponseType(typeof(ArticleViewModelList), StatusCodes.Status200OK)]
         public async Task<ArticleViewModelList> GetArticles(
             [FromQuery] string tag,

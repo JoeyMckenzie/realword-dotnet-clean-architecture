@@ -38,8 +38,10 @@
                         var timer = new Stopwatch();
                         timer.Start();
                         context.Database.EnsureDeleted();
-                        context.Database.Migrate();
-                        ConduitDbInitializer.Initialize(context);
+                        context.Database.EnsureCreated();
+
+                        // Remove database seed for passing postman tests
+                        // ConduitDbInitializer.Initialize(context);
                         timer.Stop();
                         Console.WriteLine($"Seeding databases, time to initialize {timer.ElapsedMilliseconds} ms");
                     }
