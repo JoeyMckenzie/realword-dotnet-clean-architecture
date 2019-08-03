@@ -12,7 +12,8 @@ namespace Conduit.Shared.Constants
         public static readonly JsonSerializerSettings ConduitJsonSerializerSettings = new JsonSerializerSettings
         {
             ContractResolver = new CamelCasePropertyNamesContractResolver(),
-            NullValueHandling = NullValueHandling.Ignore
+            NullValueHandling = NullValueHandling.Ignore,
+            DateFormatHandling = DateFormatHandling.IsoDateFormat
         };
     }
 }

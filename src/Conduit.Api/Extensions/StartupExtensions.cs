@@ -10,7 +10,6 @@ namespace Conduit.Api.Extensions
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
     using Microsoft.IdentityModel.Tokens;
-    using Persistence;
     using Swashbuckle.AspNetCore.Swagger;
 
     public static class StartupExtensions

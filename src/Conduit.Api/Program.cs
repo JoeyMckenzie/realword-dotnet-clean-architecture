@@ -6,7 +6,6 @@
     using System.Linq;
     using Microsoft.AspNetCore;
     using Microsoft.AspNetCore.Hosting;
-    using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
@@ -18,8 +17,8 @@
         {
             // CreateWebHostBuilder(args).Build().Run();
             var configuration = new ConfigurationBuilder()
-            .AddJsonFile("appsettings.json", true, true)
-            .Build();
+                .AddJsonFile("appsettings.json", true, true)
+                .Build();
 
             var host = CreateWebHostBuilder(args).Build();
             var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");

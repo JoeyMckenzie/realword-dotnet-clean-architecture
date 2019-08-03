@@ -91,7 +91,11 @@
             services
                 .AddMvc()
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
-                .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<CreateUserCommandValidator>());
+                .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<CreateUserCommandValidator>())
+                .AddJsonOptions(options =>
+                {
+                    options.SerializerSettings.DateFormatHandling = ConduitConstants.ConduitJsonSerializerSettings.DateFormatHandling;
+                });
             services.AddCors();
 
             // Override built in model state validation
