@@ -8,7 +8,7 @@ namespace Conduit.Persistence.Infrastructure
     public abstract class DesignTimeDbContextFactoryBase<TContext> : IDesignTimeDbContextFactory<TContext>
         where TContext : DbContext
     {
-        private const string ConnectionStringName = "Conduit";
+        private const string ConnectionStringName = "CONNECTION_STRING";
 
         public TContext CreateDbContext(string[] args)
         {

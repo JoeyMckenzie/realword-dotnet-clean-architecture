@@ -55,8 +55,6 @@ namespace Conduit.Persistence.Migrations
 
                     b.Property<string>("Description");
 
-                    b.Property<int>("FavoritesCount");
-
                     b.Property<string>("Slug");
 
                     b.Property<string>("Title");
@@ -396,11 +394,11 @@ namespace Conduit.Persistence.Migrations
             modelBuilder.Entity("Conduit.Domain.Entities.UserFollow", b =>
                 {
                     b.HasOne("Conduit.Domain.Entities.ConduitUser", "UserFollower")
-                        .WithMany("Followers")
+                        .WithMany("Following")
                         .HasForeignKey("UserFollowerId");
 
                     b.HasOne("Conduit.Domain.Entities.ConduitUser", "UserFollowing")
-                        .WithMany("Following")
+                        .WithMany("Followers")
                         .HasForeignKey("UserFollowingId");
                 });
 

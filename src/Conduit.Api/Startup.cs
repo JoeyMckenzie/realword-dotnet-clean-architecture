@@ -47,7 +47,7 @@
             // Add health checks
             services.AddHealthChecks()
                 .AddSqlServer(
-                    Configuration["Conduit"],
+                    Configuration["CONNECTION_STRING"],
                     "SELECT 1;",
                     "Conduit Health Query",
                     HealthStatus.Degraded,
@@ -58,7 +58,7 @@
 
             // Add EF Core
             services.AddDbContext<ConduitDbContext>(options =>
-                options.UseSqlServer(Configuration["Conduit"]));
+                options.UseSqlServer(Configuration["CONNECTION_STRING"]));
 
             // Add Identity
             services.AddIdentity<ConduitUser, IdentityRole>(options =>
@@ -112,7 +112,6 @@
             else
             {
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-                app.UseHttpsRedirection();
                 app.UseHsts();
             }
 

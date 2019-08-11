@@ -1,0 +1,25 @@
+version: '3.5'
+
+services:
+      
+  conduit:
+    image: conduit_api:latest
+    ports:
+      - "80:80"
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      CONNECTION_STRING: ${CONNECTION_STRING}
+      JWT_SECRET: ${JWT_SECRET}
+      ISSUER: ${ISSUER}
+      AUDIENCE: ${AUDIENCE}
+    build:
+      context: .
+      dockerfile: src/Conduit.Api/Dockerfile
+    depends_on:
+      - db
+  
+  db:
+    image: microsoft/mssql-server-linux:2017-latest
+    environment:
+      SA_PASSWORD: ${SA_PASSWORD}
+      ACCEPT_EULA: "Y"

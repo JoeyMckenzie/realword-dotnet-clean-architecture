@@ -1,22 +1,20 @@
 FROM microsoft/dotnet:2.2-aspnetcore-runtime AS Base
 WORKDIR /app
-EXPOSE 80
-EXPOSE 443
+EXPOSE 80/tcp
+EXPOSE 443/tcp
 
 
-# Restore dotnet before build to allow for caching
+# Copy source files to the daemon, run from parent directory so we have access to the required CA build files
 FROM microsoft/dotnet:2.2-sdk AS build
 WORKDIR /
-RUN ls
 COPY StyleCop.json .
 COPY Conduit.CodeAnalysis.ruleset .
 COPY Conduit.CodeAnalysis.targets .
 WORKDIR /src
 COPY /src .
 
-# Build and copy the out to the container
+# Build and publish
 RUN dotnet restore /src/Conduit.Api/Conduit.Api.csproj
-# Copy source files and build
 RUN dotnet build /src/Conduit.Api/Conduit.Api.csproj --no-restore -c Release
 RUN dotnet publish /src/Conduit.Api/Conduit.Api.csproj --no-restore -c Release -o /app
 

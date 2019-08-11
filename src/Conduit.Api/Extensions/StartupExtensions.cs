@@ -3,7 +3,6 @@ namespace Conduit.Api.Extensions
     using System;
     using System.Text;
     using System.Threading.Tasks;
-    using Core.Infrastructure;
     using Microsoft.AspNetCore.Authentication.JwtBearer;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.Extensions.Configuration;
@@ -35,27 +34,20 @@ namespace Conduit.Api.Extensions
 
         public static void AddJwtAuthentication(this IServiceCollection services, ILogger<Startup> logger, IConfiguration configuration)
         {
-            var securityKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(configuration["Conduit:JwtSecret"]));
+            var securityKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(configuration["JWT_SECRET"]));
 
             var tokenValidationParameters = new TokenValidationParameters
             {
                 ValidateIssuer = true,
                 ValidateAudience = true,
                 ValidateIssuerSigningKey = true,
-                ValidIssuer = configuration["Conduit:Issuer"],
-                ValidAudience = configuration["Conduit:Audience"],
+                ValidIssuer = configuration["ISSUER"],
+                ValidAudience = configuration["AUDIENCE"],
                 IssuerSigningKey = securityKey,
                 ClockSkew = TimeSpan.Zero,
                 ValidateLifetime = true,
                 RequireExpirationTime = false
             };
-
-            services.Configure<JwtOptionsConfiguration>(options =>
-            {
-                options.Issuer = configuration["Conduit:Issuer"];
-                options.Audience = configuration["Conduit:Audience"];
-                options.SigningCredentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
-            });
 
             services.AddAuthentication(options =>
                 {
@@ -64,7 +56,7 @@ namespace Conduit.Api.Extensions
                 })
                 .AddJwtBearer(jwtBearerOptions =>
                 {
-                    jwtBearerOptions.ClaimsIssuer = configuration["Conduit:Issuer"];
+                    jwtBearerOptions.ClaimsIssuer = configuration["ISSUER"];
                     jwtBearerOptions.RequireHttpsMetadata = false;
                     jwtBearerOptions.SaveToken = true;
                     jwtBearerOptions.TokenValidationParameters = tokenValidationParameters;

@@ -24,25 +24,10 @@ namespace Conduit.Infrastructure.Security
 
         public string CreateToken(ConduitUser user)
         {
-            var tokenKey = Encoding.ASCII.GetBytes(_configuration["Conduit:JwtSecret"]);
-            var issuer = _configuration["Conduit:Issuer"];
-            var audience = _configuration["Conduit:Audience"];
+            var tokenKey = Encoding.ASCII.GetBytes(_configuration["JWT_SECRET"]);
+            var issuer = _configuration["ISSUER"];
+            var audience = _configuration["AUDIENCE"];
 
-            /*
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var tokenDescriptor = new SecurityTokenDescriptor
-            {
-                Subject = BuildUserBasedClaims(user),
-                Issuer = _configuration["Conduit:TokenIssuer"],
-                Audience = _configuration["Conduit:TokenAudience"],
-                IssuedAt = _dateTime.Now,
-                Expires = _dateTime.Now.AddMinutes(60),
-                NotBefore = _dateTime.Now.AddMinutes(45),
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(tokenKey), SecurityAlgorithms.HmacSha256Signature)
-            };
-            */
-
-            // string tokenString;
             var securityToken = new JwtSecurityToken(
                 issuer: issuer,
                 audience: audience,
@@ -50,23 +35,6 @@ namespace Conduit.Infrastructure.Security
                 notBefore: _dateTime.Now,
                 expires: _dateTime.Now.AddMinutes(60),
                 signingCredentials: new SigningCredentials(new SymmetricSecurityKey(tokenKey), SecurityAlgorithms.HmacSha256Signature));
-
-            /*
-            try
-            {
-                var token = tokenHandler.CreateToken(securityToken);
-                tokenString = tokenHandler.WriteToken(token);
-            }
-            catch (Exception e)
-            {
-                throw new ConduitApiException($"Could not generate security token for user request [{user.Id}] ({user.Email}), reason: {e.Message}", HttpStatusCode.InternalServerError);
-            }
-
-            if (string.IsNullOrWhiteSpace(tokenString))
-            {
-                throw new ConduitApiException($"Security was not generated properly for user [{user.Id}] ({user.Email}), please try again", HttpStatusCode.BadRequest);
-            }
-            */
 
             return new JwtSecurityTokenHandler().WriteToken(securityToken);
         }

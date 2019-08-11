@@ -6,6 +6,7 @@
     using System.Linq;
     using Microsoft.AspNetCore;
     using Microsoft.AspNetCore.Hosting;
+    using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
@@ -15,40 +16,31 @@
     {
         public static void Main(string[] args)
         {
-            // CreateWebHostBuilder(args).Build().Run();
-            var configuration = new ConfigurationBuilder()
-                .AddJsonFile("appsettings.json", true, true)
-                .Build();
-
             var host = CreateWebHostBuilder(args).Build();
             var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
 
-            if (IsDatabaseRerollEnabled(args, environment))
+            // Seed database
+            using (var scope = host.Services.CreateScope())
             {
-                // Seed database
-                using (var scope = host.Services.CreateScope())
+                try
                 {
-                    try
-                    {
-                        var context = scope.ServiceProvider.GetService<ConduitDbContext>();
+                    var context = scope.ServiceProvider.GetService<ConduitDbContext>();
 
-                        // Drop the tables to recreate them with fresh data every server re-roll
-                        Console.WriteLine("Initializing database contexts");
-                        var timer = new Stopwatch();
-                        timer.Start();
-                        context.Database.EnsureDeleted();
-                        context.Database.EnsureCreated();
+                    // Drop the tables to recreate them with fresh data every server re-roll
+                    Console.WriteLine("Initializing database contexts");
+                    var timer = new Stopwatch();
+                    timer.Start();
+                    context.Database.Migrate();
 
-                        // Remove database seed for passing postman tests
-                        // ConduitDbInitializer.Initialize(context);
-                        timer.Stop();
-                        Console.WriteLine($"Seeding databases, time to initialize {timer.ElapsedMilliseconds} ms");
-                    }
-                    catch (Exception e)
-                    {
-                        var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
-                        logger.LogError(e, "Could not seed database");
-                    }
+                    // Remove database seed for passing postman tests
+                    ConduitDbInitializer.Initialize(context);
+                    timer.Stop();
+                    Console.WriteLine($"Seeding databases, time to initialize {timer.ElapsedMilliseconds} ms");
+                }
+                catch (Exception e)
+                {
+                    var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
+                    logger.LogError(e, "Could not seed database");
                 }
             }
 
